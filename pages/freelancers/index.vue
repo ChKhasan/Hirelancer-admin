@@ -108,7 +108,7 @@
             <span
               v-if="checkAccess('orders', 'put')"
               class="action-btn"
-              @click="$router.push(`/orders/order/${text}`)"
+              @click="$router.push(`/freelancers/${text}`)"
               v-html="editIcon"
             >
             </span>

@@ -5,13 +5,54 @@
       :breadbrumb="['Заказы']"
       :lastLink="`Заказ №${this.$route.params.index}`"
     >
+    <div class="d-flex justify-content-between btn_group">
+        <a-button
+          class="add-btn add-header-btn btn-primary d-flex align-items-center"
+          :type="
+            $route.hash == '#total_info' || $route.hash == '' ? 'primary' : 'default'
+          "
+          @click="$router.push({ hash: 'total_info' })"
+        >
+          Общие данные
+        </a-button>
+        <a-button
+          class="add-btn add-header-btn btn-primary d-flex align-items-center"
+          :type="$route.hash == '#sessions_tariffs' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'sessions_tariffs' })"
+        >
+          Сеансы и тарифы
+        </a-button>
+        <a-button
+          class="add-btn add-header-btn btn-primary d-flex align-items-center"
+          :type="$route.hash == '#faq' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'faq' })"
+        >
+          FAQ
+        </a-button>
+        <a-button
+          class="add-btn add-header-btn btn-primary d-flex align-items-center"
+          :type="$route.hash == '#reviews' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'reviews' })"
+        >
+          Отзывы
+        </a-button>
+      </div>
       <div class="d-flex">
         <div
           class="add-btn add-header-btn add-header-btn-padding btn-light-primary mx-3"
-          @click="$router.go(-1)"
+          @click="$router.push('/')"
         >
           Отмена
         </div>
+        <a-button
+          class="add-btn add-header-btn btn-primary d-flex align-items-center"
+          type="primary"
+          @click="onSubmit"
+          v-if="checkAccess('services', 'post')"
+        >
+          <span class="svg-icon"> </span>
+          Добавить
+        </a-button>
       </div>
     </TitleBlock>
     <a-form-model :model="form" ref="ruleForm" :rules="rules" layout="vertical">
