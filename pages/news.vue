@@ -170,7 +170,7 @@ export default {
   head: {
     title: "Новости",
   },
-  middleware: ["auth", "access"],
+  // middleware: ["auth", "access"],
   mixins: [status, global, authAccess],
   data() {
     return {

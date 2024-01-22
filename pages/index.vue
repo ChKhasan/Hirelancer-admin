@@ -1,235 +1,264 @@
-<template>
-  <div class="">
-    <TitleBlock title="Услуги " :breadbrumb="['Главный']" lastLink="Услуги">
-      <div class="d-flex">
-        <a-button
-          class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          type="primary"
-          @click="$router.push('/add_park_services')"
-          v-if="checkAccess('services', 'post')"
-        >
-          <span class="svg-icon" v-html="addIcon"></span>
-          Добавить
-        </a-button>
-      </div>
-    </TitleBlock>
-    <div class="container_xl app-container pb-5 pt-5">
-      <div class="card_block main-table px-4 pb-4">
+<template lang="html">
+  <div class="all-orders">
+    <TitleBlock title="Фрилансеры"> </TitleBlock>
+
+    <div class="container_xl app-container pb-4 pt-5">
+      <div class="card_block main-table px-4 py-3">
         <div class="d-flex justify-content-between align-items-center card_header">
-          <div class="prodduct-list-header-grid w-100 align-items-center">
-            <SearchInput placeholder="Поиск" @changeSearch="changeSearch" />
-            <div>{{ search }}</div>
+          <div class="oroder-filter-grid w-100 align-items-center">
+            <SearchInput
+              placeholder="Поиск"
+              @changeSearch="($event) => changeSearch($event, '__GET_ORDERS')"
+            />
+            <div class="input status-select w-100">
+              <a-form-model-item
+                class="form-item mb-0"
+                :class="{ 'select-placeholder': !value }"
+              >
+                <a-select v-model="value" placeholder="Статус">
+                  <a-select-option
+                    v-for="filterItem in statusFilter"
+                    :key="filterItem?.id"
+                    placeholder="good"
+                  >
+                    {{ filterItem?.name?.ru }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </div>
+            <div class="input status-select w-100">
+              <a-form-model-item
+                class="form-item mb-0"
+                :class="{ 'select-placeholder': !value }"
+              >
+                <a-select v-model="value" placeholder="Дата">
+                  <a-select-option
+                    v-for="filterItem in statusFilter"
+                    :key="filterItem?.id"
+                    placeholder="good"
+                  >
+                    {{ filterItem?.name?.ru }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </div>
+            <div class="input status-select w-100">
+              <a-form-model-item
+                class="form-item mb-0"
+                :class="{ 'select-placeholder': !value }"
+              >
+                <a-select v-model="value" placeholder="Категория">
+                  <a-select-option
+                    v-for="filterItem in statusFilter"
+                    :key="filterItem?.id"
+                    placeholder="good"
+                  >
+                    {{ filterItem?.name?.ru }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </div>
             <a-button
-              @click="clearQuery"
               type="primary"
               class="d-flex align-items-center justify-content-center"
+              @click="clearQuery('__GET_ORDERS')"
               style="height: 38px"
-              ><a-icon type="reload"
+            >
+              <a-icon type="reload"
             /></a-button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="container_xl app-container main-table">
+      <div class="card_block main-table px-4 py-4">
         <a-table
-          :columns="columns"
+          :columns="columnsFreelancers"
+          :data-source="data"
           :pagination="false"
-          :data-source="services"
           :loading="loading"
+          align="center"
         >
-          <span slot="sm_banner" slot-scope="text">
-            <img v-if="text != null" class="table-image" :src="text" />
-            <img
-              v-else
-              class="table-image"
-              src="../assets/images/photo_2023-03-04_13-28-58.jpg"
-            />
+          <span to="/orders/1232/details" slot="client" slot-scope="text" align="center">
+            {{ text }}
           </span>
-          <span slot="indexId" slot-scope="text">#{{ text?.key }}</span>
-          <span slot="create_at" slot-scope="text">{{
-            moment(text?.created_at).format("DD/MM/YYYY")
-          }}</span>
+          <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
+
           <span
-            slot="name"
-            slot-scope="text"
-            v-html="text?.ru ? text?.ru : '-----'"
-          ></span>
-          <span
-            slot="guarantee"
-            slot-scope="text"
-            v-html="text?.ru ? text?.ru : '-----'"
-          ></span>
-          <span slot="package_options" slot-scope="text">
-            <span
-              class="option-items d-flex flex-column"
-              v-for="desc in text"
-              v-html="desc?.desc?.ru ? desc?.desc?.ru : '-----'"
-            ></span>
+            slot="status"
+            slot-scope="tags"
+            class="tags-style"
+            :class="{
+              tag_success: tags == 'online',
+              tag_rejected: tags == 'offline',
+            }"
+          >
+            <!-- 'new', 'canceled', 'accepted', 'in_process' -->
+            {{ status[tags] }}
           </span>
-          <span slot="id" slot-scope="text">
+          <span slot="btns" slot-scope="text">
+            <!-- <span
+                  v-if="checkAccess('orders', 'put')"
+                  class="action-btn"
+                  v-html="eyeIcon"
+                  @click="$router.push(`/orders/order/${text}`)"
+                >
+                </span> -->
             <span
-              v-if="checkAccess('services', 'put')"
+              v-if="checkAccess('orders', 'put')"
               class="action-btn"
+              @click="$router.push(`/freelancers/${text}`)"
               v-html="editIcon"
-              @click="$router.push(`/edit_park_services/${text}`)"
             >
             </span>
-            <span
-              v-if="checkAccess('services', 'put')"
-              class="action-btn"
-              v-html="eyeIcon"
-              @click="$router.push(`/show_park_services/${text}`)"
-            >
+            <span class="action-btn" @click="deleteAction(text)" v-html="deleteIcon">
             </span>
           </span>
         </a-table>
+        <div class="d-flex justify-content-between mt-4">
+          <a-select
+            v-model="params.pageSize"
+            class="table-page-size"
+            style="width: 120px"
+            @change="
+              ($event) =>
+                changePageSizeGlobal($event, '/orders/all-orders', '__GET_ORDERS')
+            "
+          >
+            <a-select-option
+              v-for="item in pageSizes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              >{{ item.label }}
+            </a-select-option>
+          </a-select>
+          <a-pagination
+            class="table-pagination"
+            :simple="false"
+            v-model.number="current"
+            :total="totalPage"
+            :page-size.sync="params.pageSize"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
-import SearchInput from "../components/form/Search-input.vue";
-import TitleBlock from "../components/Title-block.vue";
-import status from "../mixins/status";
-import global from "../mixins/global";
-import authAccess from "../mixins/authAccess";
+import SearchInput from "@/components/form/Search-input.vue";
+import TitleBlock from "@/components/Title-block.vue";
+import columns from "@/mixins/columns";
 import moment from "moment";
-
-const columns = [
-  {
-    title: "№",
-    key: "indexId",
-    slots: { title: "customTitle" },
-    scopedSlots: { customRender: "indexId" },
-    className: "column-service",
-    align: "left",
-    width: 50,
-  },
-  {
-    title: "ИМЯ",
-    dataIndex: "sm_banner",
-    key: "sm_banner",
-    slots: { title: "customTitle" },
-    scopedSlots: { customRender: "sm_banner" },
-    className: "column-name",
-    width: "60px",
-    align: "left",
-    colSpan: 2,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-    slots: { title: "customTitle" },
-    scopedSlots: { customRender: "name" },
-    className: "column-name",
-    width: 200,
-    colSpan: 0,
-  },
-  {
-    title: "Дата",
-    className: "column-date",
-    scopedSlots: { customRender: "create_at" },
-  },
-  // {
-  //   title: "гарантия",
-  //   dataIndex: "guarantee",
-  //   key: "guarantee",
-  //   className: "column-service",
-  //   scopedSlots: { customRender: "guarantee" },
-  // },
-  // {
-  //   title: "варианты пакетов",
-  //   dataIndex: "package_options",
-  //   key: "package_options",
-  //   className: "column-subservice",
-  //   scopedSlots: { customRender: "package_options" },
-  // },
-  {
-    title: "ДЕЙСТВИЯ",
-    className: "column-btns",
-    key: "id",
-    dataIndex: "id",
-    align: "right",
-    scopedSlots: { customRender: "id" },
-    width: 100,
-  },
-];
+import global from "@/mixins/global";
+import OrderBtns from "@/components/order-btns.vue";
+import authAccess from "@/mixins/authAccess";
 
 export default {
-  name: "IndexPage",
-  // middleware: "auth",
-  head: {
-    title: "Услуги",
-  },
-  mixins: [status, global, authAccess],
+  layout: "toolbar",
+  mixins: [columns, global, authAccess],
   data() {
     return {
-      eyeIcon: require("../assets/svg/Eye.svg?raw"),
-      editIcon: require("../assets/svg/edit.svg?raw"),
-      deleteIcon: require("../assets/svg/delete.svg?raw"),
-      addIcon: require("../assets/svg/add-icon.svg?raw"),
+      statusFilter: [
+        {
+          name: {
+            ru: "Активный",
+          },
+          id: 1,
+        },
+        {
+          name: {
+            ru: "Неактивный",
+          },
+          id: 2,
+        },
+      ],
+      value: "",
+      pageSize: 10,
+      eyeIcon: require("@/assets/svg/Eye.svg?raw"),
+      editIcon: require("@/assets/svg/edit.svg?raw"),
+      deleteIcon: require("@/assets/svg/delete.svg?raw"),
       loading: false,
-      search: "",
-      columns,
-      services: [],
+      orders: [],
+      data: [
+        {
+          id: 1,
+          name: "Order name",
+          phone_number: "+998 99 730 14 99",
+          age: "24",
+          date: "24/09/2024",
+          region: "Qashqadaryo",
+          category: "Kategoriya",
+          status: "online",
+        },
+        {
+          id: 2,
+          name: "Order name",
+          phone_number: "+998 99 730 14 99",
+          age: "24",
+          date: "24/09/2024",
+          region: "Qashqadaryo",
+          category: "Kategoriya",
+          status: "offline",
+        },
+      ],
+      status: {
+        online: "В сети",
+        offline: "Не в сети",
+      },
     };
   },
   mounted() {
-    this.getFirstData("/", "__GET_SERVICES");
-    this.checkAllActions("services");
+    this.getFirstData("__GET_ORDERS");
+    this.checkAllActions("orders");
   },
   methods: {
     moment,
-    async clearQuery(val) {
-      this.value = "";
-      const query = { ...this.$route.query, page: 1 };
-      this.current = 1;
-      delete query.search;
-      if (this.$route.query?.search) {
-        await this.$router.replace({
-          path: "/",
-          query: { ...query },
-        });
-        this.__GET_SERVICES();
-      }
+    deleteAction(id) {},
+
+    async __GET_ORDERS() {
+      console.log("Loading....");
+      // this.loading = true;
+      // const data = await this.$store.dispatch("fetchOrders/getOrders", {
+      //   ...this.$route.query,
+      // });
+      // this.loading = false;
+      // const pageIndex = this.indexPage(
+      //   data?.orders?.current_page,
+      //   data?.orders?.per_page
+      // );
+      // this.orders = data?.orders?.data.map((item, index) => {
+      //   return {
+      //     ...item,
+      //     key: index + pageIndex,
+      //   };
+      // });
+      // this.totalPage = data?.orders?.total;
+      // this.orders.dataAdd = moment(data?.orders?.created_at).format("DD/MM/YYYY");
     },
-    async changeSearch(val) {
-      this.searchVal = val.target.value;
-      if (val.target.value.length > 2) {
-        if (this.$route.query?.search != val.target.value)
-          await this.$router.replace({
-            path: "/",
-            query: { ...this.$route.query, search: val.target.value },
-          });
-        if (val.target.value == this.$route.query.search) this.__GET_SERVICES();
-      } else if (val.target.value.length == 0) {
-        this.clearQuery(val);
-      }
-    },
-    async __GET_SERVICES() {
-      this.loading = true;
-      const data = await this.$store.dispatch("fetchServices/getServices", {
-        ...this.$route.query,
-      });
-      this.loading = false;
-      console.log(data);
-      this.services = data?.services.map((item, index) => {
-        return {
-          ...item,
-          key: index + 1,
-        };
-      });
+    indexPage(current_page, per_page) {
+      return (current_page * 1 - 1) * per_page + 1;
     },
   },
-  components: { TitleBlock, SearchInput },
+  watch: {
+    async current(val) {
+      this.changePagination(val, "__GET_ORDERS");
+    },
+    async value(val) {
+      if (val) {
+        if (this.$route.query?.service != val)
+          await this.$router.replace({
+            path: this.$route.path,
+            query: { ...this.$route.query, service: val },
+          });
+        if (val == this.$route.query.service) this.__GET_ORDERS();
+      }
+    },
+  },
+  components: { TitleBlock, SearchInput, OrderBtns },
 };
 </script>
 <style lang="css">
-.prodduct-list-header-grid {
-  display: grid;
-  grid-template-columns: 3fr 2fr 40px;
-  grid-gap: 8px;
-}
-.card_header {
-  padding: 16.25px 0;
-}
+@import "@/assets/css/pages/order.css";
 </style>

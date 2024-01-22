@@ -8,13 +8,13 @@
         <a-form-model :model="form" ref="ruleForm" :rules="rules" layout="vertical">
           <div class="login_input mb-10">
             <label for="">Имя пользователя</label>
-            <a-form-model-item prop="username" class="mb-0">
+            <a-form-model-item prop="email" class="mb-0">
               <a-input
                 @keyup.enter="login"
                 type="text"
                 class="input"
-                placeholder="Username"
-                v-model="form.username"
+                placeholder="email"
+                v-model="form.email"
               />
             </a-form-model-item>
             <!-- <input type="text" class="input" v-model="form.username" /> -->
@@ -58,13 +58,13 @@ import status from "../../mixins/status";
 import global from "../../mixins/global";
 export default {
   layout: "empty",
-  // middleware: "login",
+  middleware: "login",
   mixins: [status, global],
   data() {
     return {
       showError: false,
       rules: {
-        username: [
+        email: [
           { required: true, message: "This field is required", trigger: "change" },
         ],
         password: [
@@ -72,7 +72,7 @@ export default {
         ],
       },
       form: {
-        username: "",
+        email: "",
         password: "",
       },
     };
@@ -81,9 +81,10 @@ export default {
     handleClose() {},
     async __AUTH(data) {
       try {
-        // const res = await this.$store.dispatch("fetchAuth/auth", data);
-        // localStorage.setItem("auth_token", res.token);
-        // this.$store.commit("logIn");
+        const res = await this.$store.dispatch("fetchAuth/auth", data);
+        console.log(res);
+        localStorage.setItem("auth_token", res.content.accessToken);
+        this.$store.commit("logIn");
         this.$router.push("/");
       } catch (e) {
         this.showError = true;

@@ -101,7 +101,62 @@
               </div>
               <div>
                 <div>
-                  <div class="card_block main-table px-4 py-4">
+                  <div class="card_block main-table px-4 py-4 ">
+                    <FormTitle title="Параметры" />
+                    <div class="settings" :class="{ 'select-placeholder': !value }">
+                      <a-select
+                        v-model="value"
+                        placeholder="Статус"
+                        :class="{ 'select-placeholder': !value }"
+                      >
+                        <a-select-option
+                          v-for="filterItem in statusFilter"
+                          :key="filterItem?.id"
+                          placeholder="good"
+                        >
+                          {{ filterItem?.name?.ru }}
+                        </a-select-option>
+                      </a-select>
+                      <a-select
+                        v-model="value"
+                        placeholder="Статус"
+                        :class="{ 'select-placeholder': !value }"
+                      >
+                        <a-select-option
+                          v-for="filterItem in statusFilter"
+                          :key="filterItem?.id"
+                          placeholder="good"
+                        >
+                          {{ filterItem?.name?.ru }}
+                        </a-select-option>
+                      </a-select>
+                      <a-select
+                        v-model="value"
+                        placeholder="Статус"
+                        :class="{ 'select-placeholder': !value }"
+                      >
+                        <a-select-option
+                          v-for="filterItem in statusFilter"
+                          :key="filterItem?.id"
+                          placeholder="good"
+                        >
+                          {{ filterItem?.name?.ru }}
+                        </a-select-option>
+                      </a-select>
+                    </div>
+                  </div>
+                  <div class="card_block main-table px-4 py-4 mt-4">
+                    <FormTitle title="Статистика" />
+                    <div class="statistics-block personal-info mt-0">
+                      <p class="mt-1">Количество активных заказов: <span>24</span></p>
+                      <p class="mt-1">
+                        Количество ожидающих предложений: <span>30</span>
+                      </p>
+                      <p class="mt-1">Принимает предложения: <span>5</span></p>
+                    </div>
+                  </div>
+                
+                  <div class="card_block main-table px-4 py-4 mt-4">
                     <FormTitle title="BIO" />
                     <div class="bio">
                       <p>
@@ -120,44 +175,7 @@
                       </p>
                     </div>
                   </div>
-                  <div class="card_block main-table px-4 py-4 mt-4">
-                    <FormTitle title="Статистика" />
-                    <div class="bio">
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa
-                        sequi deleniti fuga? Repellat omnis quos doloribus ea labore
-                        voluptate, maxime fugit similique magni, quasi quae officiis at.
-                        Nihil eveniet laudantium porro nam placeat molestiae laborum
-                        accusamus. Autem molestias cum ipsam dolorem provident beatae ipsa
-                        adipisci ab, qui, vero corrupti, molestiae voluptatem impedit
-                        incidunt ducimus. Natus, nemo. Porro, quam exercitationem vero
-                        ducimus, deleniti repudiandae earum iusto blanditiis quo placeat
-                        non odio numquam. Voluptatum, commodi. Vel reiciendis delectus
-                        repellendus debitis ipsa. Inventore maiores dolorem nam animi
-                        tempore non adipisci, ad ullam eum? Exercitationem et illo
-                        voluptatum? A ipsa laborum culpa consequuntur eveniet?
-                      </p>
-                    </div>
-                  </div>
-                  <div class="card_block main-table px-4 py-4 mt-4">
-                    <FormTitle title="Параметры" />
-                    <div class="bio">
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa
-                        sequi deleniti fuga? Repellat omnis quos doloribus ea labore
-                        voluptate, maxime fugit similique magni, quasi quae officiis at.
-                        Nihil eveniet laudantium porro nam placeat molestiae laborum
-                        accusamus. Autem molestias cum ipsam dolorem provident beatae ipsa
-                        adipisci ab, qui, vero corrupti, molestiae voluptatem impedit
-                        incidunt ducimus. Natus, nemo. Porro, quam exercitationem vero
-                        ducimus, deleniti repudiandae earum iusto blanditiis quo placeat
-                        non odio numquam. Voluptatum, commodi. Vel reiciendis delectus
-                        repellendus debitis ipsa. Inventore maiores dolorem nam animi
-                        tempore non adipisci, ad ullam eum? Exercitationem et illo
-                        voluptatum? A ipsa laborum culpa consequuntur eveniet?
-                      </p>
-                    </div>
-                  </div>
+                
                 </div>
               </div>
             </div>
@@ -424,6 +442,21 @@ export default {
   },
   data() {
     return {
+      statusFilter: [
+        {
+          name: {
+            ru: "Активный",
+          },
+          id: 1,
+        },
+        {
+          name: {
+            ru: "Неактивный",
+          },
+          id: 2,
+        },
+      ],
+      value: "",
       data: [
         {
           id: 1,
@@ -552,5 +585,10 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
+}
+.statistics-block,.settings {
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
 }
 </style>

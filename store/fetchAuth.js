@@ -1,6 +1,6 @@
 export const actions = {
   async auth({}, data) {
-    const res = await this.$axios.$post(`/auth/login`, data);
+    const res = await this.$axios.$post(`/admin/auth/login`, data);
     return res;
   },
   async logOut({}, data) {

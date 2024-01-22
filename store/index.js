@@ -77,7 +77,7 @@ export const actions = {
       commit("permissions", res?.me?.role?.permissions);
       commit("takeOperatorName", res?.me);
     } catch (e) {
-      localStorage.removeItem("auth_token");
+      // localStorage.removeItem("auth_token");
     }
   },
 };

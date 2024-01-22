@@ -30,13 +30,18 @@ export default {
     init(axios) {
       axios.defaults.withCredentials = true;
     },
-    baseURL: "https://api.safarpark.uz/api",
+    baseURL: "https://hirelancer.kifa.uz/api",
   },
   components: true,
 
   buildModules: ["@nuxtjs/svg"],
 
-  modules: ["bootstrap-vue/nuxt", "@nuxtjs/axios", "nuxt-precompress"],
+  modules: [
+    "bootstrap-vue/nuxt",
+    "@nuxtjs/axios",
+    "nuxt-precompress",
+    "@nuxtjs/dotenv",
+  ],
   nuxtPrecompress: {
     enabled: true,
     report: false,

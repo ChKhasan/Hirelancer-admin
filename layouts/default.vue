@@ -3,7 +3,7 @@
     <a-layout>
       <a-layout-sider v-model="collapsed" collapsible width="265">
         <div class="layout-logo" :class="{ 'logo-collapsed': collapsed }">
-          <h1 class="logo-text"> Hirelancer</h1>
+          <h1 class="logo-text">Hirelancer</h1>
           <div class="sidebar_toggle" @click="onCollapse">
             <svg
               width="24"
@@ -80,7 +80,7 @@
 import TitleBlock from "../components/Title-block.vue";
 import status from "../mixins/status";
 export default {
-  // middleware: ["auth", "access"],
+  middleware: ["auth", "access"],
 
   data() {
     return {
@@ -103,6 +103,21 @@ export default {
     await this.$store.dispatch("getPermissions");
 
     this.menuData = [
+      {
+        title: "Фрилансеры",
+        sub: "3",
+        icon: require("../assets/svg/clients.svg?raw"),
+        menuItems: [
+          {
+            key: "41",
+            name: "Фрилансеры",
+            to: "/freelancers",
+            add: "/freelancers",
+            edit: "/freelancers",
+            show: this.checkShow("freelancers/all"),
+          },
+        ],
+      },
       // {
       //   title: "Главный",
       //   sub: "1",
@@ -233,21 +248,7 @@ export default {
           },
         ],
       },
-      {
-        title: "Фрилансеры",
-        sub: "3",
-        icon: require("../assets/svg/clients.svg?raw"),
-        menuItems: [
-          {
-            key: "41",
-            name: "Фрилансеры",
-            to: "/freelancers",
-            add: "/freelancers",
-            edit: "/freelancers",
-            show: this.checkShow("freelancers/all"),
-          },
-        ],
-      },
+
       {
         title: "Продавцы",
         sub: "4",
@@ -302,6 +303,30 @@ export default {
             edit: "settings-users",
             show: this.checkShow("users"),
           },
+          {
+            key: "25",
+            name: "Регионы",
+            to: "/settings/regions",
+            add: "settings-regions",
+            edit: "settings-regions",
+            show: true,
+          },
+          {
+            key: "26",
+            name: "Специальности",
+            to: "/settings/specialities",
+            add: "settings-specialities",
+            edit: "settings-specialities",
+            show: true,
+          },
+          {
+            key: "27",
+            name: "Страны",
+            to: "/settings/countries",
+            add: "settings-countries",
+            edit: "settings-countries",
+            show: true,
+          },
         ],
       },
     ];
@@ -330,7 +355,7 @@ export default {
     async logOut() {
       try {
         const data = await this.$store.dispatch("fetchAuth/logOut");
-        await localStorage.removeItem("auth_token");
+        // await localStorage.removeItem("auth_token");
         this.$router.push("/admin/login");
       } catch (e) {
         this.statusFunc(e);
@@ -346,7 +371,7 @@ export default {
       } else if (this.$route.name.includes("sellers")) {
         this.openKeys = ["4"];
       } else {
-        this.openKeys = ["1"];
+        this.openKeys = ["3"];
       }
     },
     d(item) {
