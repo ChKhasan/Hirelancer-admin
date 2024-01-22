@@ -67,8 +67,8 @@ export default {
     },
   },
   server: {
-    port: 8000,
-    host: "localhost",
+    port: process.env.PORT,
+    host: process.env.HOST,
   },
   build: {},
 };
