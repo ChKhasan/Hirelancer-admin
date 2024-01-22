@@ -30,7 +30,7 @@ export default {
     init(axios) {
       axios.defaults.withCredentials = true;
     },
-    baseURL: "https://hirelancer.kifa.uz/api",
+    baseURL: process.env.BASE_URL,
   },
   components: true,
 
