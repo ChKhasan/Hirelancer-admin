@@ -38,7 +38,7 @@
         </a-button>
       </div>
       <div class="d-flex">
-        <a-select v-model="filter" placeholder="Filter" style="min-width: 125px;">
+        <a-select v-model="filter" placeholder="Filter" style="min-width: 125px">
           <a-select-option v-for="item in [1, 2, 4]" :key="item">
             {{ item }}
           </a-select-option>
@@ -64,7 +64,10 @@
       <div class="pb-5 pt-5">
         <a-spin :spinning="spinning" :delay="delayTime">
           <div class="container_xl app-container d-flex flex-column spin-content">
-            <div class="order-grid">
+            <div
+              class="order-grid"
+              v-if="$route.hash == '#total_info' || $route.hash == ''"
+            >
               <div>
                 <div class="card_block main-table px-4 py-4">
                   <a-descriptions title="Данные заказа" layout="vertical">
@@ -115,10 +118,13 @@
                 </div>
               </div>
             </div>
-            <div class="card_block main-table px-4 py-4 mt-5">
+            <div
+              class="card_block main-table px-4 py-4"
+              v-if="$route.hash == '#applications'"
+            >
               <FormTitle title="Предложения" />
               <a-table
-                :columns="columnsShow1"
+                :columns="columnsOrderApp"
                 :data-source="data"
                 :pagination="false"
                 :loading="loading"
@@ -133,7 +139,7 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-
+                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -196,10 +202,13 @@
                 />
               </div>
             </div>
-            <div class="card_block main-table px-4 py-4 mt-5">
+            <div
+              class="card_block main-table px-4 py-4"
+              v-if="$route.hash == '#complaints'"
+            >
               <FormTitle title="Жалобы" />
               <a-table
-                :columns="columnsShow2"
+                :columns="columnsComp"
                 :data-source="data"
                 :pagination="false"
                 :loading="loading"
@@ -214,7 +223,7 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-
+                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -224,17 +233,9 @@
                     tag_rejected: tags == 'notSelected',
                   }"
                 >
-                  <!-- 'new', 'canceled', 'accepted', 'in_process' -->
                   {{ status[tags] }}
                 </span>
                 <span slot="btns" slot-scope="text">
-                  <!-- <span
-                  v-if="checkAccess('orders', 'put')"
-                  class="action-btn"
-                  v-html="eyeIcon"
-                  @click="$router.push(`/orders/order/${text}`)"
-                >
-                </span> -->
                   <span
                     v-if="checkAccess('orders', 'put')"
                     class="action-btn"
@@ -837,5 +838,10 @@ export default {
 }
 .ant-fullcalendar-fullscreen .ant-fullcalendar-header .ant-radio-group {
   display: none !important;
+}
+.app-text {
+  text-decoration: underline;
+  color: #5C46E5;
+  cursor: pointer;
 }
 </style>

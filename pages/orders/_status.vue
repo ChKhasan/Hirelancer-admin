@@ -222,9 +222,9 @@ export default {
 
     async __GET_ORDERS() {
       // this.loading = true;
-      // const data = await this.$store.dispatch("fetchOrders/getOrders", {
-      //   ...this.$route.query,
-      // });
+      const data = await this.$store.dispatch("fetchOrders/getOrders", {
+        ...this.$route.query,
+      });
       // this.loading = false;
       // const pageIndex = this.indexPage(
       //   data?.orders?.current_page,

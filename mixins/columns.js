@@ -185,7 +185,7 @@ export default {
           align: "center",
         },
       ],
-      columnsShow1: [
+      columnsOrderApp: [
         {
           title: "ID",
           slots: { title: "customTitle" },
@@ -245,7 +245,7 @@ export default {
           align: "center",
         },
       ],
-      columnsShow2: [
+      columnsComp: [
         {
           title: "ID",
           slots: { title: "customTitle" },
