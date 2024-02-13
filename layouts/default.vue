@@ -118,81 +118,6 @@ export default {
           },
         ],
       },
-      // {
-      //   title: "Главный",
-      //   sub: "1",
-      //   icon: require("../assets/svg/toolbar-catalog.svg?raw"),
-      //   menuItems: [
-      //     {
-      //       key: "1",
-      //       name: "Услуги",
-      //       to: "/",
-      //       add: "add_park_services",
-      //       edit: "edit_park_services",
-      //       show: this.checkShow("services"),
-      //     },
-      //     {
-      //       key: "2",
-      //       name: "Новости",
-      //       to: "/news",
-      //       add: "add_news",
-      //       edit: "edit_news",
-      //       show: this.checkShow("posts"),
-      //     },
-      //     {
-      //       key: "3",
-      //       name: "Галереи",
-      //       to: "/galleries",
-      //       add: "add_galleries",
-      //       edit: "edit_galleries",
-      //       show: this.checkShow("galleries"),
-      //     },
-      //     {
-      //       key: "4",
-      //       name: "F.A.Q",
-      //       to: "/faqs",
-      //       add: "add_faqs",
-      //       edit: "edit_faqs",
-      //       show: this.checkShow("faqs"),
-      //     },
-      //     {
-      //       key: "7",
-      //       name: "Категории (F.A.Q)",
-      //       to: "/category_faqs",
-      //       add: "category_faqs",
-      //       edit: "category_faqs",
-      //       show: this.checkShow("faq_categories"),
-      //     },
-      //     {
-      //       key: "6",
-      //       name: "Промо",
-      //       to: "/promos",
-      //       show: this.checkShow("promos"),
-      //     },
-      //     {
-      //       key: "5",
-      //       name: "Заявки",
-      //       to: "/applications",
-      //       show: this.checkShow("applications"),
-      //     },
-      //     {
-      //       key: "8",
-      //       name: "Партнеры",
-      //       to: "/partners",
-      //       add: "/partners",
-      //       edit: "/partners",
-      //       show: this.checkShow("partners"),
-      //     },
-      //     {
-      //       key: "9",
-      //       name: "Отзывы",
-      //       to: "/feedbacks",
-      //       add: "/feedbacks",
-      //       edit: "/feedbacks",
-      //       show: this.checkShow("feedbacks"),
-      //     },
-      //   ],
-      // },
       {
         title: "Заказы",
         sub: "2",
@@ -342,13 +267,13 @@ export default {
 
   methods: {
     checkShow(val) {
-      if (this.$store.state.permissions.length > 0) {
-        // const target = this.$store.state.permissions.find((item) => item.url == val);
-        // return target?.pivot?.actions.includes("get");
+      // if (this.$store.state.permissions.length > 0) {
+      // const target = this.$store.state.permissions.find((item) => item.url == val);
+      // return target?.pivot?.actions.includes("get");
         return true;
-      } else {
-        return true;
-      }
+      // } else {
+      //   return true;
+      // }
     },
     onCollapse(collapsed, type) {
       this.collapsed = !this.collapsed;

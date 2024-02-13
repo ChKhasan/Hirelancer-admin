@@ -1,3 +1,4 @@
+import moment from "moment";
 export default {
   data() {
     return {
@@ -14,27 +15,31 @@ export default {
           scopedSlots: { customRender: "name" },
           className: "column-name",
           key: "name",
+          width: "300px",
         },
         {
-          title: "Дата публикации",
-          dataIndex: "date",
-          scopedSlots: { customRender: "date" },
+          title: "Дата",
+          dataIndex: "created_at",
+          scopedSlots: { customRender: "created_at" },
+          customRender: (text) => moment(text).format("DD.MM.YYYY"),
           className: "column-date",
         },
         {
           title: "Цена",
-          dataIndex: "seller",
-          scopedSlots: { customRender: "seller" },
+          dataIndex: "price",
+          // scopedSlots: { customRender: "price" },
+          customRender: (text) => `${text ? text : "По договоренности"}`,
           className: "column-client",
-          key: "seller",
+          key: "price",
         },
 
         {
           title: "Срок",
-          dataIndex: "count",
-          scopedSlots: { customRender: "count" },
+          dataIndex: "deadline",
+          scopedSlots: { customRender: "deadline" },
+          customRender: (text) => `${text ? text : "По договоренности"}`,
           className: "column-name",
-          key: "count",
+          key: "deadline",
         },
         {
           title: "Категория",
@@ -45,24 +50,26 @@ export default {
         },
         {
           title: "статус",
-          dataIndex: "status",
           scopedSlots: { customRender: "status" },
           className: "column-tags",
           key: "status",
         },
         {
-          title: "Имя фрилансера - ID",
-          dataIndex: "freelancer",
-          scopedSlots: { customRender: "freelancer" },
+          title: "фрилансер - ID",
+          dataIndex: "selected_request",
+          scopedSlots: { customRender: "selected_request" },
+          customRender: (text) =>
+            text ? `${text.freelancer?.name} - ${text.freelancer?.id}` : "----",
           className: "column-client",
-          key: "freelancer",
+          key: "selected_request",
         },
         {
-          title: "Имя продавца - ID",
-          dataIndex: "seller",
-          scopedSlots: { customRender: "seller" },
+          title: "Продавец - ID",
+          dataIndex: "client",
+          scopedSlots: { customRender: "client" },
+          customRender: (text) => `${text.name} - ${text.id}`,
           className: "column-client",
-          key: "seller",
+          key: "client",
         },
         {
           title: "ДЕЙСТВИЯ",

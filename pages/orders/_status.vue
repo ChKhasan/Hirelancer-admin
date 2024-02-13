@@ -80,7 +80,7 @@
       <div class="card_block main-table px-4 py-4">
         <a-table
           :columns="columnsOrders"
-          :data-source="data"
+          :data-source="orders"
           :pagination="false"
           :loading="loading"
           align="center"
@@ -95,14 +95,14 @@
             slot-scope="tags"
             class="tags-style"
             :class="{
-              tag_success: tags == 'active',
-              tag_inProgress: tags == 'in_process',
-              tag_approved: tags == 'accepted',
-              tag_rejected: tags == 'canceled',
+              tag_success: !tags.status && tags.end_of_execution,
+              tag_inProgress: !tags.status && !tags.end_of_execution,
+              tag_approved: tags.status && !tags.end_of_execution,
+              tag_rejected: tags.status == -1,
             }"
           >
             <!-- 'new', 'canceled', 'accepted', 'in_process' -->
-            Active
+            {{ tags.status }}
           </span>
           <span slot="btns" slot-scope="text">
             <!-- <span
@@ -205,9 +205,9 @@ export default {
         },
       ],
       status: {
-        new: "Новые",
-        in_process: "Ожидание",
-        accepted: "Принятые",
+        new: "В модерации",
+        in_process: "Активные",
+        accepted: "В процессе",
         canceled: "Отмененные",
       },
     };
@@ -221,23 +221,21 @@ export default {
     deleteAction(id) {},
 
     async __GET_ORDERS() {
-      // this.loading = true;
+      this.loading = true;
       const data = await this.$store.dispatch("fetchOrders/getOrders", {
         ...this.$route.query,
       });
-      // this.loading = false;
-      // const pageIndex = this.indexPage(
-      //   data?.orders?.current_page,
-      //   data?.orders?.per_page
-      // );
-      // this.orders = data?.orders?.data.map((item, index) => {
-      //   return {
-      //     ...item,
-      //     key: index + pageIndex,
-      //   };
-      // });
-      // this.totalPage = data?.orders?.total;
-      // this.orders.dataAdd = moment(data?.orders?.created_at).format("DD/MM/YYYY");
+      console.log(data);
+      this.loading = false;
+      const pageIndex = this.indexPage(data?.meta?.current_page, data?.meta?.per_page);
+      this.orders = data?.data.map((item, index) => {
+        return {
+          ...item,
+          key: index + pageIndex,
+        };
+      });
+      console.log(this.orders);
+      this.totalPage = data?.meta?.total;
     },
     indexPage(current_page, per_page) {
       return (current_page * 1 - 1) * per_page + 1;

@@ -139,7 +139,9 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
+                <span slot="text" slot-scope="text" class="app-text"
+                  >Посмотреть текст</span
+                >
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -223,7 +225,13 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
+                <span
+                  slot="text"
+                  slot-scope="text"
+                  class="app-text"
+                  @click="visible = true"
+                  >Посмотреть текст</span
+                >
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -282,99 +290,35 @@
         </a-spin>
       </div>
     </a-form-model>
+
     <a-modal
       v-model="visible"
+      class="text-modal"
       centered
-      title="Изменить заказa"
-      :closable="false"
+      :title="'Текст предложения'"
       width="720px"
       @ok="handleOk"
     >
       <div class="d-flex flex-column">
-        <a-calendar
-          mode="month"
-          :disabled-date="disabledDate"
-          @change="changeCalendar"
-          @panelChange="panelChange"
-        >
-          <ul slot="dateCellRender" slot-scope="value" class="events">
-            <li v-for="item in getListData(value)" :key="item.content">
-              <a-badge :status="item.type" :text="item.content" />
-            </li>
+        <div class="head">
+          <ul>
+            <li>Akmal Egamberdiyev - 546</li>
+            <li>Price: 16 000 000</li>
+            <li>Srok: 31 дней</li>
           </ul>
-          <template slot="monthCellRender" slot-scope="value">
-            <div v-if="getMonthData(value)" class="notes-month">
-              <section>{{ getMonthData(value) }}</section>
-              <span>Backlog number</span>
-            </div>
-          </template>
-        </a-calendar>
-      </div>
-      <template slot="footer">
-        <div class="add_modal-footer d-flex justify-content-end">
-          <div
-            class="add-btn add-header-btn add-header-btn-padding btn-light-primary mx-3"
-            @click="handleOk"
-          >
-            Отмена
-          </div>
-          <a-button
-            class="add-btn add-header-btn btn-primary"
-            type="primary"
-            :disabled="disabledBtn"
-            @click="saveCalendar"
-          >
-            Сохранять
-          </a-button>
         </div>
-      </template>
-    </a-modal>
-    <a-modal
-      v-model="visibleSessions"
-      centered
-      :title="targetTicket?.tariff?.name?.ru"
-      :closable="false"
-      width="720px"
-      @ok="handleOk"
-    >
-      <div class="d-flex flex-column">
-        <a-form-model
-          :model="formModal"
-          ref="ruleFormSession"
-          :rules="rulesModal"
-          layout="vertical"
-        >
-          <a-form-model-item
-            class="form-item mb-3"
-            :class="{ 'select-placeholder': formModal.session == null }"
-            label="Сессия"
-            prop="session"
-          >
-            <a-select v-model="formModal.session" placeholder="Сессия">
-              <a-select-option v-for="(session, index) in sessions" :key="session">
-                {{ session }}
-              </a-select-option>
-            </a-select>
-          </a-form-model-item>
-        </a-form-model>
-      </div>
-      <template slot="footer">
-        <div class="add_modal-footer d-flex justify-content-end">
-          <div
-            class="add-btn add-header-btn add-header-btn-padding btn-light-primary mx-3"
-            @click="(visible = true), (visibleSessions = false)"
-          >
-            Отмена
-          </div>
-          <a-button
-            class="add-btn add-header-btn btn-primary"
-            type="primary"
-            @click="saveData"
-          >
-            Сохранять
-          </a-button>
+        <div class="body">
+          <p>
+            Приветствую! Меня заинтересовал ваш проект. Моя цель – создавать интересные и
+            интуитивно понятные пользовательские интерфейсы, которые вдохновляют и
+            привлекают пользователей, улучшают их опыт и способствуют достижению
+            бизнес-целей. Портфолио: https://www.behance.net/polinatim Буду рада обсудить
+            детали моей кандидатуры и возможности сотрудничества. Пожалуйста, свяжитесь со
+            мной для дальнейшего обсуждения. С уважение
+          </p>
         </div>
-      </template>
+      </div>
+      <template slot="footer"><span></span> </template>
     </a-modal>
   </div>
 </template>
@@ -426,7 +370,6 @@ export default {
         notSelected: "Не выбран",
       },
       visible: false,
-      visibleSessions: false,
       spinning: false,
       delayTime: 0,
       emptyDate: [],
@@ -587,6 +530,7 @@ export default {
   },
   async mounted() {
     this.$store.dispatch("getOrders");
+    this.__GET_ORDERS_BY_ID();
   },
   methods: {
     disabledDate(current) {
@@ -598,11 +542,6 @@ export default {
     async changeCalendar(e) {
       this.currentDay = e;
       this.disabledDays();
-      this.__GET_TARIFF_SESSIONS({
-        tariff_id: this.targetTicket.tariff.id,
-        date: moment(e).format("YYYY-MM-DD"),
-        guests_count: this.countSumm(),
-      });
     },
     countSumm() {
       let summ = 0;
@@ -732,23 +671,23 @@ export default {
       }
     },
     async __GET_ORDERS_BY_ID(id) {
-      // try {
-      //   const data = await this.$store.dispatch(
-      //     "fetchOrders/getOrdersById",
-      //     this.$route.params.index
-      //   );
-      //   this.order = data?.order;
-      //   this.statusValue = data?.order?.status;
-      //   this.order.created_at = moment(data?.order?.created_at).format(
-      //     "Do MMMM. YYYY hh:mm"
-      //   );
-      //   this.order.user.created_at = moment(data?.order?.user?.created_at).format(
-      //     "Do MMMM. YYYY hh:mm"
-      //   );
-      //   this.spinning = false;
-      // } catch (e) {
-      //   this.statusFunc(e);
-      // }
+      try {
+        const data = await this.$store.dispatch(
+          "fetchOrders/getOrdersById",
+          this.$route.params.index
+        );
+        this.order = data?.content;
+        this.statusValue = data?.content?.status;
+        this.order.created_at = moment(data?.content?.created_at).format(
+          "Do MMMM. YYYY hh:mm"
+        );
+        this.order.user.created_at = moment(data?.content?.user?.created_at).format(
+          "Do MMMM. YYYY hh:mm"
+        );
+        this.spinning = false;
+      } catch (e) {
+        this.statusFunc(e);
+      }
     },
     async __GET_EMPTY_DATE(data) {
       try {
@@ -758,23 +697,6 @@ export default {
           tariff_id: this.targetTicket?.tariff?.id,
         });
         this.emptyDate = data?.days;
-      } catch (e) {
-        this.statusFunc(e);
-      }
-    },
-    async __GET_TARIFF_SESSIONS(data1) {
-      try {
-        const data = await this.$store.dispatch("fetchTariff/getTariffSessions", data1);
-        console.log(data);
-        this.sessions = data.sessions;
-        this.formModal.session = null;
-        if (this.sessions == null) {
-          this.disabledBtn = false;
-        } else if (this.sessions.length > 0) {
-          this.disabledBtn = true;
-          this.visibleSessions = true;
-          this.visible = false;
-        }
       } catch (e) {
         this.statusFunc(e);
       }
@@ -841,7 +763,27 @@ export default {
 }
 .app-text {
   text-decoration: underline;
-  color: #5C46E5;
+  color: #5c46e5;
   cursor: pointer;
+}
+.text-modal .ant-modal-footer {
+  display: none;
+}
+.text-modal .head ul {
+  list-style: none;
+}
+.text-modal .head ul li {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+}
+.text-modal .body {
+  border-top: 1px solid rgb(0, 0, 0, 0.2);
+  padding-top: 16px;
+}
+.text-modal .body p {
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
 }
 </style>
