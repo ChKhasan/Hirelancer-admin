@@ -199,7 +199,7 @@ const columns = [
 export default {
   name: "IndexPage",
   head: {
-    title: "Страны",
+    title: "Специальности",
   },
   mixins: [status, global, authAccess],
   data() {

@@ -1,93 +1,49 @@
 export const actions = {
   async getTranslations({}, payload) {
-    try {
-      const res = await this.$axios.$get(`/translates`, {
-        params: payload,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
-      return res;
-    } catch (e) {
-      return e;
-    }
+    const res = await this.$axiosInstance.$get(`/api/translates`, {
+      params: payload,
+    });
+    return res;
   },
   async getTranslateGruop({}, payload) {
-    try {
-      const res = await this.$axios.$get(`/translate_groups`, {
-        params: payload,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
-      return res;
-    } catch (e) {
-      return e;
-    }
+    const res = await this.$axiosInstance.$get(`/api/translate_groups`, {
+      params: payload,
+    });
+    return res;
   },
   async getAllTranslations() {
-    const res = await this.$axios.$get(`/translates/all`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$get(`/api/translates/all`, {});
     return res;
   },
   async getTranslationsById({}, id) {
-    try {
-      const res = await this.$axios.$get(`/translates/${id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
-      return res;
-    } catch (e) {
-      return e;
-    }
+    const res = await this.$axiosInstance.$get(`/api/translates/${id}`);
+    return res;
   },
 
   async postTranslations({}, data) {
-    const res = await this.$axios.$post(`/translates`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$post(`/api/translates`, data);
     return res;
   },
   async postUpdateTranslations({}, data) {
-    const res = await this.$axios.$put(`/translates/multiple_update`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$put(
+      `/api/translates/multiple_update`,
+      data
+    );
     return res;
   },
   async postTranslateGroup({}, data) {
-    const res = await this.$axios.$post(`/translate_groups`, data, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$post(`/api/translate_groups`, data);
     return res;
   },
   async editTranslations({}, payload) {
-    const res = await this.$axios.$put(
+    const res = await this.$axiosInstance.$put(
       `/translates/${payload.id}`,
-      payload.data,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      }
+      payload.data
     );
     return res;
   },
   async deleteTranslations({}, id) {
-    const res = await this.$axios.$delete(`/translates/${id}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$delete(`/api/translates/${id}`);
     return res;
   },
 };

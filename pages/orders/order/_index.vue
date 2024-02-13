@@ -5,7 +5,7 @@
       :breadbrumb="['Заказы']"
       :lastLink="`Заказ №${this.$route.params.index}`"
     >
-    <div class="d-flex justify-content-between btn_group">
+      <div class="d-flex justify-content-between btn_group">
         <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="
@@ -13,38 +13,43 @@
           "
           @click="$router.push({ hash: 'total_info' })"
         >
-          Общие данные
+          О заказе
         </a-button>
         <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#sessions_tariffs' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'sessions_tariffs' })"
+          :type="$route.hash == '#applications' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'applications' })"
         >
-          Сеансы и тарифы
+          Заявки
         </a-button>
         <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#faq' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'faq' })"
+          :type="$route.hash == '#complaints' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'complaints' })"
         >
-          FAQ
+          Жалобы
         </a-button>
         <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#reviews' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'reviews' })"
+          :type="$route.hash == '#history' ? 'primary' : 'default'"
+          @click="$router.push({ hash: 'history' })"
         >
-          Отзывы
+          История чата
         </a-button>
       </div>
       <div class="d-flex">
+        <a-select v-model="filter" placeholder="Filter" style="min-width: 125px;">
+          <a-select-option v-for="item in [1, 2, 4]" :key="item">
+            {{ item }}
+          </a-select-option>
+        </a-select>
         <div
           class="add-btn add-header-btn add-header-btn-padding btn-light-primary mx-3"
-          @click="$router.push('/')"
+          @click="$router.go(-1)"
         >
-          Отмена
+          Назад
         </div>
-        <a-button
+        <!-- <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           type="primary"
           @click="onSubmit"
@@ -52,7 +57,7 @@
         >
           <span class="svg-icon"> </span>
           Добавить
-        </a-button>
+        </a-button> -->
       </div>
     </TitleBlock>
     <a-form-model :model="form" ref="ruleForm" :rules="rules" layout="vertical">
@@ -392,6 +397,7 @@ export default {
   },
   data() {
     return {
+      filter: undefined,
       data: [
         {
           id: 1,

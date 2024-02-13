@@ -55,6 +55,7 @@
 </template>
 <script>
 import status from "../../mixins/status";
+import CodeInput from "vue-verification-code-input";
 import global from "../../mixins/global";
 export default {
   layout: "empty",
@@ -64,9 +65,7 @@ export default {
     return {
       showError: false,
       rules: {
-        email: [
-          { required: true, message: "This field is required", trigger: "change" },
-        ],
+        email: [{ required: true, message: "This field is required", trigger: "change" }],
         password: [
           { required: true, message: "This field is required", trigger: "change" },
         ],
@@ -93,6 +92,9 @@ export default {
     login() {
       this.__AUTH(this.form);
     },
+  },
+  components: {
+    CodeInput,
   },
 };
 </script>

@@ -9,25 +9,11 @@ export default {
           className: "column-service",
         },
         {
-          title: "Название заказа",
+          title: "Название",
           dataIndex: "name",
           scopedSlots: { customRender: "name" },
           className: "column-name",
           key: "name",
-        },
-        {
-          title: "Имя продавца",
-          dataIndex: "seller",
-          scopedSlots: { customRender: "seller" },
-          className: "column-client",
-          key: "seller",
-        },
-        {
-          title: "Имя фрилансера",
-          dataIndex: "freelancer",
-          scopedSlots: { customRender: "freelancer" },
-          className: "column-client",
-          key: "freelancer",
         },
         {
           title: "Дата публикации",
@@ -35,14 +21,14 @@ export default {
           scopedSlots: { customRender: "date" },
           className: "column-date",
         },
-
         {
-          title: "Категория",
-          dataIndex: "category",
-          scopedSlots: { customRender: "category" },
-          className: "column-name",
-          key: "category",
+          title: "Цена",
+          dataIndex: "seller",
+          scopedSlots: { customRender: "seller" },
+          className: "column-client",
+          key: "seller",
         },
+
         {
           title: "Срок",
           dataIndex: "count",
@@ -51,11 +37,32 @@ export default {
           key: "count",
         },
         {
+          title: "Категория",
+          dataIndex: "category",
+          scopedSlots: { customRender: "category" },
+          className: "column-name",
+          key: "category",
+        },
+        {
           title: "статус",
           dataIndex: "status",
           scopedSlots: { customRender: "status" },
           className: "column-tags",
           key: "status",
+        },
+        {
+          title: "Имя фрилансера - ID",
+          dataIndex: "freelancer",
+          scopedSlots: { customRender: "freelancer" },
+          className: "column-client",
+          key: "freelancer",
+        },
+        {
+          title: "Имя продавца - ID",
+          dataIndex: "seller",
+          scopedSlots: { customRender: "seller" },
+          className: "column-client",
+          key: "seller",
         },
         {
           title: "ДЕЙСТВИЯ",

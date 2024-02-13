@@ -130,7 +130,11 @@
             style="width: 120px"
             @change="
               ($event) =>
-                changePageSizeGlobal($event, '/orders/all-orders', '__GET_ORDERS')
+                changePageSizeGlobal(
+                  $event,
+                  `/orders/${$route.params.status}`,
+                  '__GET_ORDERS'
+                )
             "
           >
             <a-select-option
@@ -217,7 +221,6 @@ export default {
     deleteAction(id) {},
 
     async __GET_ORDERS() {
-      console.log("Loading....");
       // this.loading = true;
       // const data = await this.$store.dispatch("fetchOrders/getOrders", {
       //   ...this.$route.query,

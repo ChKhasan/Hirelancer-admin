@@ -56,24 +56,12 @@ export const mutations = {
 };
 export const actions = {
   async getOrders({ commit }, payload) {
-    const res = await this.$axios.$get(`/orders/counts`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-      },
-    });
+    const res = await this.$axiosInstance.$get(`/orders/counts`, {});
     commit("orders", res?.counts);
   },
   async getPermissions({ commit }, payload) {
     try {
-      const res = await this.$axios.$post(
-        `/auth/me`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          },
-        }
-      );
+      const res = await this.$axiosInstance.$post(`/auth/me`);
       commit("permissions", res?.me?.role?.permissions);
       commit("takeOperatorName", res?.me);
     } catch (e) {
