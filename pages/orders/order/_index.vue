@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="posts">
     <TitleBlock
       :title="`Заказ №${this.$route.params.index}`"
@@ -9,7 +9,9 @@
         <a-button
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="
-            $route.hash == '#total_info' || $route.hash == '' ? 'primary' : 'default'
+            $route.hash == '#total_info' || $route.hash == ''
+              ? 'primary'
+              : 'default'
           "
           @click="$router.push({ hash: 'total_info' })"
         >
@@ -38,7 +40,11 @@
         </a-button>
       </div>
       <div class="d-flex">
-        <a-select v-model="filter" placeholder="Filter" style="min-width: 125px">
+        <a-select
+          v-model="filter"
+          placeholder="Filter"
+          style="min-width: 125px"
+        >
           <a-select-option v-for="item in [1, 2, 4]" :key="item">
             {{ item }}
           </a-select-option>
@@ -63,7 +69,9 @@
     <a-form-model :model="form" ref="ruleForm" :rules="rules" layout="vertical">
       <div class="pb-5 pt-5">
         <a-spin :spinning="spinning" :delay="delayTime">
-          <div class="container_xl app-container d-flex flex-column spin-content">
+          <div
+            class="container_xl app-container d-flex flex-column spin-content"
+          >
             <div
               class="order-grid"
               v-if="$route.hash == '#total_info' || $route.hash == ''"
@@ -83,11 +91,15 @@
                     <a-descriptions-item label="Категория">
                       Kategoriya
                     </a-descriptions-item>
-                    <a-descriptions-item label="Цена"> $20.00 </a-descriptions-item>
+                    <a-descriptions-item label="Цена">
+                      $20.00
+                    </a-descriptions-item>
                     <a-descriptions-item label="Срок">
                       20/08/2024 - 12/12/2024</a-descriptions-item
                     >
                   </a-descriptions>
+
+                  <OrderShow />
                 </div>
               </div>
 
@@ -101,7 +113,10 @@
                     label="Статус"
                   >
                     <a-select v-model="statusValue" placeholder="Tags Mode">
-                      <a-select-option v-for="elem in statusData" :key="elem.value">
+                      <a-select-option
+                        v-for="elem in statusData"
+                        :key="elem.value"
+                      >
                         {{ elem.label }}
                       </a-select-option>
                     </a-select>
@@ -139,7 +154,9 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
+                <span slot="text" slot-scope="text" class="app-text"
+                  >Посмотреть текст</span
+                >
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -182,7 +199,11 @@
                   style="width: 120px"
                   @change="
                     ($event) =>
-                      changePageSizeGlobal($event, '/orders/all-orders', '__GET_ORDERS')
+                      changePageSizeGlobal(
+                        $event,
+                        '/orders/all-orders',
+                        '__GET_ORDERS'
+                      )
                   "
                 >
                   <a-select-option
@@ -223,7 +244,9 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-                <span slot="text" slot-scope="text" class="app-text">Посмотреть текст</span>
+                <span slot="text" slot-scope="text" class="app-text"
+                  >Посмотреть текст</span
+                >
                 <span
                   slot="status"
                   slot-scope="tags"
@@ -258,7 +281,11 @@
                   style="width: 120px"
                   @change="
                     ($event) =>
-                      changePageSizeGlobal($event, '/orders/all-orders', '__GET_ORDERS')
+                      changePageSizeGlobal(
+                        $event,
+                        '/orders/all-orders',
+                        '__GET_ORDERS'
+                      )
                   "
                 >
                   <a-select-option
@@ -351,7 +378,10 @@
             prop="session"
           >
             <a-select v-model="formModal.session" placeholder="Сессия">
-              <a-select-option v-for="(session, index) in sessions" :key="session">
+              <a-select-option
+                v-for="(session, index) in sessions"
+                :key="session"
+              >
                 {{ session }}
               </a-select-option>
             </a-select>
@@ -390,6 +420,8 @@ import global from "../../../mixins/global";
 import authAccess from "../../../mixins/authAccess";
 import BiletCard from "../../../components/cards/biletCard.vue";
 import moment from "moment";
+
+import OrderShow from "@/components/show/OrderShow.vue";
 
 export default {
   mixins: [status, authAccess, columns, global],
@@ -592,7 +624,9 @@ export default {
     disabledDate(current) {
       return (
         (current && current.valueOf() < Date.now()) ||
-        this.disabledDates.find((date) => date === moment(current).format("YYYY-MM-DD"))
+        this.disabledDates.find(
+          (date) => date === moment(current).format("YYYY-MM-DD")
+        )
       );
     },
     async changeCalendar(e) {
@@ -623,7 +657,9 @@ export default {
       this.visible = true;
     },
     disabledDays() {
-      const dates = this.emptyDate.filter((item) => item.available < this.countSumm());
+      const dates = this.emptyDate.filter(
+        (item) => item.available < this.countSumm()
+      );
       if (dates.length > 0) {
         this.disabledDates = dates.map((elem) => {
           return `${moment(this.currentDay).format("YYYY")}-${moment(
@@ -764,7 +800,10 @@ export default {
     },
     async __GET_TARIFF_SESSIONS(data1) {
       try {
-        const data = await this.$store.dispatch("fetchTariff/getTariffSessions", data1);
+        const data = await this.$store.dispatch(
+          "fetchTariff/getTariffSessions",
+          data1
+        );
         console.log(data);
         this.sessions = data.sessions;
         this.formModal.session = null;
@@ -780,7 +819,7 @@ export default {
       }
     },
   },
-  components: { TitleBlock, FormTitle, BiletCard },
+  components: { TitleBlock, FormTitle, BiletCard, OrderShow },
 };
 </script>
 <style lang="css">
@@ -841,7 +880,7 @@ export default {
 }
 .app-text {
   text-decoration: underline;
-  color: #5C46E5;
+  color: #5c46e5;
   cursor: pointer;
 }
 </style>
