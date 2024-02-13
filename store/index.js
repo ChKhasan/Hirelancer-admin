@@ -56,14 +56,14 @@ export const mutations = {
 };
 export const actions = {
   async getOrders({ commit }, payload) {
-    const res = await this.$axiosInstance.$get(`/api/admin/orders/counts`, {});
-    commit("orders", res?.counts);
+    // const res = await this.$axiosInstance.$get(`/api/admin/orders/counts`, {});
+    // commit("orders", res?.counts);
   },
   async getPermissions({ commit }, payload) {
     try {
-      const res = await this.$axiosInstance.$post(`/api/admin/auth/me`);
-      commit("permissions", res?.me?.role?.permissions);
-      commit("takeOperatorName", res?.me);
+      // const res = await this.$axiosInstance.$post(`/api/admin/auth/me`);
+      // commit("permissions", res?.me?.role?.permissions);
+      // commit("takeOperatorName", res?.me);
     } catch (e) {
       // localStorage.removeItem("auth_token");
     }

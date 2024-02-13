@@ -6,8 +6,8 @@ export const actions = {
     return res;
   },
   async getOrdersCount() {
-    const res = await this.$axiosInstance.$get(`/api/admin/orders/counts`);
-    return res;
+    // const res = await this.$axiosInstance.$get(`/api/admin/orders/counts`);
+    // return res;
   },
   async getBookedOrders({}, payload) {
     const res = await this.$axiosInstance.$get(

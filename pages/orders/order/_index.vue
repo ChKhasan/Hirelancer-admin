@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="posts">
     <TitleBlock
       :title="`Заказ №${this.$route.params.index}`"
@@ -7,6 +7,8 @@
     >
       <div class="d-flex justify-content-between btn_group">
         <a-button
+          tabindex="1"
+          ref="myButton"
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="
             $route.hash == '#total_info' || $route.hash == '' ? 'primary' : 'default'
@@ -16,6 +18,8 @@
           О заказе
         </a-button>
         <a-button
+          ref="urlInput"
+          tabindex="2"
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="$route.hash == '#applications' ? 'primary' : 'default'"
           @click="$router.push({ hash: 'applications' })"
@@ -23,6 +27,7 @@
           Заявки
         </a-button>
         <a-button
+          tabindex="3"
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="$route.hash == '#complaints' ? 'primary' : 'default'"
           @click="$router.push({ hash: 'complaints' })"
@@ -30,6 +35,7 @@
           Жалобы
         </a-button>
         <a-button
+          tabindex="4"
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
           :type="$route.hash == '#history' ? 'primary' : 'default'"
           @click="$router.push({ hash: 'history' })"
@@ -70,7 +76,7 @@
             >
               <div>
                 <div class="card_block main-table px-4 py-4">
-                  <a-descriptions title="Данные заказа" layout="vertical">
+                  <!-- <a-descriptions title="Данные заказа" layout="vertical">
                     <a-descriptions-item label="Название заказа">
                       Order name
                     </a-descriptions-item>
@@ -87,7 +93,9 @@
                     <a-descriptions-item label="Срок">
                       20/08/2024 - 12/12/2024</a-descriptions-item
                     >
-                  </a-descriptions>
+                  </a-descriptions> -->
+
+                  <OrderShow :order="order" />
                 </div>
               </div>
 
@@ -125,7 +133,7 @@
               <FormTitle title="Предложения" />
               <a-table
                 :columns="columnsOrderApp"
-                :data-source="data"
+                :data-source="order?.requests"
                 :pagination="false"
                 :loading="loading"
                 align="center"
@@ -139,7 +147,11 @@
                   {{ text }}
                 </span>
                 <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
-                <span slot="text" slot-scope="text" class="app-text"
+                <span
+                  slot="text"
+                  slot-scope="text"
+                  class="app-text"
+                  @click="handleApp(text)"
                   >Посмотреть текст</span
                 >
                 <span
@@ -302,23 +314,29 @@
       <div class="d-flex flex-column">
         <div class="head">
           <ul>
-            <li>Akmal Egamberdiyev - 546</li>
-            <li>Price: 16 000 000</li>
-            <li>Srok: 31 дней</li>
+            <li>{{ currentApp?.freelancer?.name }} - {{ currentApp?.freelancer?.id }}</li>
+            <li>
+              Price:
+              {{
+                currentApp?.price
+                  ? currentApp.price.toLocaleString()
+                  : "По договоренности"
+              }}
+            </li>
+            <li>
+              Srok:
+              {{
+                currentApp?.deadline ? `${currentApp.deadline} дней` : "По договоренности"
+              }}
+            </li>
           </ul>
         </div>
         <div class="body">
           <p>
-            Приветствую! Меня заинтересовал ваш проект. Моя цель – создавать интересные и
-            интуитивно понятные пользовательские интерфейсы, которые вдохновляют и
-            привлекают пользователей, улучшают их опыт и способствуют достижению
-            бизнес-целей. Портфолио: https://www.behance.net/polinatim Буду рада обсудить
-            детали моей кандидатуры и возможности сотрудничества. Пожалуйста, свяжитесь со
-            мной для дальнейшего обсуждения. С уважение
+            {{ currentApp?.additional_info }}
           </p>
         </div>
       </div>
-      <template slot="footer"><span></span> </template>
     </a-modal>
   </div>
 </template>
@@ -335,6 +353,8 @@ import authAccess from "../../../mixins/authAccess";
 import BiletCard from "../../../components/cards/biletCard.vue";
 import moment from "moment";
 
+import OrderShow from "@/components/show/OrderShow.vue";
+
 export default {
   mixins: [status, authAccess, columns, global],
   head: {
@@ -343,6 +363,7 @@ export default {
   data() {
     return {
       filter: undefined,
+      loading: false,
       data: [
         {
           id: 1,
@@ -517,6 +538,7 @@ export default {
         visible: false,
       },
       sessions: {},
+      currentApp: {},
     };
   },
   computed: {
@@ -532,7 +554,13 @@ export default {
     this.$store.dispatch("getOrders");
     this.__GET_ORDERS_BY_ID();
   },
+
   methods: {
+    async handleApp(obj) {
+      console.log(obj);
+      this.currentApp = await obj;
+      this.visible = true;
+    },
     disabledDate(current) {
       return (
         (current && current.valueOf() < Date.now()) ||
@@ -667,6 +695,7 @@ export default {
         this.$store.dispatch("getOrders");
         this.notification("success", "success", "Успешно изменена");
       } catch (e) {
+        console.log(e);
         this.statusFunc(e);
       }
     },
@@ -677,15 +706,10 @@ export default {
           this.$route.params.index
         );
         this.order = data?.content;
-        this.statusValue = data?.content?.status;
-        this.order.created_at = moment(data?.content?.created_at).format(
-          "Do MMMM. YYYY hh:mm"
-        );
-        this.order.user.created_at = moment(data?.content?.user?.created_at).format(
-          "Do MMMM. YYYY hh:mm"
-        );
+
         this.spinning = false;
       } catch (e) {
+        console.log(e);
         this.statusFunc(e);
       }
     },
@@ -701,8 +725,25 @@ export default {
         this.statusFunc(e);
       }
     },
+    async __GET_TARIFF_SESSIONS(data1) {
+      try {
+        const data = await this.$store.dispatch("fetchTariff/getTariffSessions", data1);
+        console.log(data);
+        this.sessions = data.sessions;
+        this.formModal.session = null;
+        if (this.sessions == null) {
+          this.disabledBtn = false;
+        } else if (this.sessions.length > 0) {
+          this.disabledBtn = true;
+          this.visibleSessions = true;
+          this.visible = false;
+        }
+      } catch (e) {
+        this.statusFunc(e);
+      }
+    },
   },
-  components: { TitleBlock, FormTitle, BiletCard },
+  components: { TitleBlock, FormTitle, BiletCard, OrderShow },
 };
 </script>
 <style lang="css">

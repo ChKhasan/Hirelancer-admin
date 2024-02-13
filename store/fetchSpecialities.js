@@ -1,20 +1,20 @@
 export const actions = {
   async getSpecialities({}, payload) {
-    const res = await this.$axiosInstance.$get(`/api/specialities`, {
+    const res = await this.$axiosInstance.$get(`/api/admin/specialities`, {
       params: payload,
     });
     return res;
   },
   async getAllSpecialities() {
-    const res = await this.$axiosInstance.$get(`/api/specialities/all`);
+    const res = await this.$axiosInstance.$get(`/api/admin/specialities/all`);
     return res;
   },
   async getSpecialitiesById({}, id) {
-    const res = await this.$axiosInstance.$get(`/api/specialities/${id}`);
+    const res = await this.$axiosInstance.$get(`/api/admin/specialities/${id}`);
     return res;
   },
   async postSpecialities({}, data) {
-    const res = await this.$axiosInstance.$post(`/api/specialities`, data);
+    const res = await this.$axiosInstance.$post(`/api/admin/specialities`, data);
     return res;
   },
   async editSpecialities({}, payload) {
@@ -25,7 +25,7 @@ export const actions = {
     return res;
   },
   async deleteSpecialities({}, id) {
-    const res = await this.$axiosInstance.$delete(`/api/specialities/${id}`);
+    const res = await this.$axiosInstance.$delete(`/api/admin/specialities/${id}`);
     return res;
   },
 };

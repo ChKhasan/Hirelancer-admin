@@ -175,60 +175,27 @@ export default {
         ],
       },
 
-      {
-        title: "Продавцы",
-        sub: "4",
-        icon: require("../assets/svg/user-gr.svg?raw"),
-        menuItems: [
-          {
-            key: "41",
-            name: "Продавцы",
-            to: "/sellers",
-            add: "/sellers",
-            edit: "/sellers",
-            show: this.checkShow("sellers"),
-          },
-        ],
-      },
+      // {
+      //   title: "Продавцы",
+      //   sub: "4",
+      //   icon: require("../assets/svg/user-gr.svg?raw"),
+      //   menuItems: [
+      //     {
+      //       key: "41",
+      //       name: "Продавцы",
+      //       to: "/sellers",
+      //       add: "/sellers",
+      //       edit: "/sellers",
+      //       show: this.checkShow("sellers"),
+      //     },
+      //   ],
+      // },
 
       {
         title: "Настройки сайта",
         sub: "5",
         icon: require("../assets/svg/settings.svg?raw"),
         menuItems: [
-          {
-            key: "21",
-            name: "Переводы",
-            to: "/settings/translations",
-            add: "settings-translations",
-            edit: "settings-translations-group",
-            show: this.checkShow("translates"),
-          },
-          {
-            key: "22",
-            name: " Общие данные",
-            to: "/settings/site-info",
-            add: "settings-site-info",
-            edit: "settings-site-info",
-            show: this.checkShow("site_infos"),
-          },
-          {
-            key: "23",
-            name: "Роли",
-            to: "/settings/roles",
-            add: "settings-roles",
-            edit: "settings-roles",
-            // show: this.checkShow("roles"),
-            show: true,
-          },
-          {
-            key: "24",
-            name: "Пользователи",
-            to: "/settings/users",
-            add: "settings-users",
-            edit: "settings-users",
-            show: this.checkShow("users"),
-          },
           {
             key: "25",
             name: "Регионы",
@@ -270,7 +237,7 @@ export default {
       // if (this.$store.state.permissions.length > 0) {
       // const target = this.$store.state.permissions.find((item) => item.url == val);
       // return target?.pivot?.actions.includes("get");
-        return true;
+      return true;
       // } else {
       //   return true;
       // }

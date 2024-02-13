@@ -225,7 +225,6 @@ export default {
       const data = await this.$store.dispatch("fetchOrders/getOrders", {
         ...this.$route.query,
       });
-      console.log(data);
       this.loading = false;
       const pageIndex = this.indexPage(data?.meta?.current_page, data?.meta?.per_page);
       this.orders = data?.data.map((item, index) => {
@@ -234,7 +233,6 @@ export default {
           key: index + pageIndex,
         };
       });
-      console.log(this.orders);
       this.totalPage = data?.meta?.total;
     },
     indexPage(current_page, per_page) {
