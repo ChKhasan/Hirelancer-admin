@@ -38,6 +38,8 @@
   border-radius: 8px;
   cursor: pointer;
   margin-bottom: 1.25rem !important;
+  border: none;
+  width: 100%;
 }
 .login_input {
   display: flex;

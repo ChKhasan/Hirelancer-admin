@@ -49,7 +49,9 @@
           </span>
         </transition>
       </div>
-      <div class="login_btn d-flex justify-content-center" @click="login">Continue</div>
+      <button class="login_btn d-flex justify-content-center" @click="login">
+        Continue
+      </button>
     </div>
   </div>
 </template>
@@ -90,7 +92,11 @@ export default {
       }
     },
     login() {
-      this.__AUTH(this.form);
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          this.__AUTH(this.form);
+        }
+      });
     },
   },
   components: {
