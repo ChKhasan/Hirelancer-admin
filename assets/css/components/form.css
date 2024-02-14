@@ -370,7 +370,8 @@
   outline: none;
   box-shadow: none;
 }
-.status-select .ant-select-selection {
+.status-select .ant-select-selection,
+.status-select .ant-calendar-picker-input {
   background: #f9f9f9;
   border-color: #f9f9f9;
   color: #000;

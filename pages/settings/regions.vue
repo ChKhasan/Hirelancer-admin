@@ -314,7 +314,6 @@ export default {
         this.visible = true;
         const { created_at, updated_at, id, ...rest } = data?.content;
         this.form = { ...rest };
-        console.log(this.form);
       } catch (e) {
         this.statusFunc(e);
       }

@@ -126,8 +126,8 @@ export default {
           {
             name: "В модерации",
             index: "31",
-            to: "/orders/moderation",
-            path: "orders-moderation",
+            to: "/orders/in_moderation",
+            path: "orders-in_moderation",
             disabled: false,
             show: this.checkShow("orders"),
           },
@@ -151,8 +151,8 @@ export default {
           {
             name: "В процессе",
             index: "34",
-            to: "/orders/process",
-            path: "orders-process",
+            to: "/orders/in_process",
+            path: "orders-in_process",
             disabled: false,
             show: this.checkShow("orders"),
           },
@@ -167,8 +167,8 @@ export default {
           {
             name: "Отмена клиентом",
             index: "38",
-            to: "/orders/cancel-client",
-            path: "orders-cancel-client",
+            to: "/orders/cancelled",
+            path: "orders-cancelled",
             disabled: false,
             show: this.checkShow("orders"),
           },

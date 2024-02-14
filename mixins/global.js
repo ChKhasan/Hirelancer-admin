@@ -50,11 +50,11 @@ export default {
       }
     },
     async clearQuery(func) {
-      this.value = "";
-      const query = { ...this.$route.query, page: 1 };
+      this.value = undefined;
+      const query = { per_page: this.params.pageSize, page: 1 };
       this.current = 1;
-      delete query.search;
-      if (this.$route.query?.search) {
+      // delete query.search;
+      if (Object.keys(this.$route.query).length > 2) {
         await this.$router.replace({
           path: this.$route.path,
           query: { ...query },

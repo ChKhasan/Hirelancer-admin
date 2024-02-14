@@ -30,13 +30,15 @@ import {
   Badge,
   Descriptions,
   Card,
-  Statistic
+  Statistic,
+  Tag
 } from "ant-design-vue";
 const { info, success, error, warning, confirm } = Modal;
 Vue.prototype.$notification = notification;
 Vue.prototype.$message = message;
 Vue.prototype.$confirm = confirm;
 
+Vue.use(Tag);
 Vue.use(Statistic);
 Vue.use(Card);
 Vue.use(Descriptions);

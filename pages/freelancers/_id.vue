@@ -51,20 +51,40 @@
                       <span class="symbol-badge"></span>
                     </div>
                     <div class="info">
-                      <h3>James Jones</h3>
+                      <h3>{{ freelancer?.name }}</h3>
                       <div class="d-flex flex-column">
-                        <p>ID: <span>#5</span></p>
-                        <p class="mt-1">Номер телефона: <span>+998 99 730 14 99</span></p>
+                        <p>
+                          ID: <span>#{{ freelancer?.id }}</span>
+                        </p>
+                        <p class="mt-1">
+                          Номер телефона: <span>+{{ freelancer?.phone }}</span>
+                        </p>
                       </div>
                     </div>
                   </div>
                   <div class="personal-info">
                     <div>
-                      <p class="mt-1">Age: <span>24</span></p>
-                      <p class="mt-1">Genger: <span>Male</span></p>
-                      <p class="mt-1">Reyting: <span>5</span></p>
-                      <p class="mt-1">Date: <span>24/09/2024</span></p>
-                      <p class="mt-1">Category: <span>Category</span></p>
+                      <p class="mt-1">Возраст: <span>24</span></p>
+                      <p class="mt-1">
+                        Генгер: <span>{{ freelancer?.gender }}</span>
+                      </p>
+                      <p class="mt-1">
+                        Рейтинг: <span>{{ Math.ceil(freelancer?.rating) }}</span>
+                      </p>
+                      <p class="mt-1">
+                        Дата:
+                        <span>{{
+                          moment(freelancer?.created_at).format("DD/MM/YYYY")
+                        }}</span>
+                      </p>
+                      <p class="mt-1">
+                        Специальности:
+                        <span style="cursor: pointer">
+                          <a-tag color="blue" style="cursor: pointer">
+                            {{ freelancer?.specialities?.length }}
+                          </a-tag></span
+                        >
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -73,27 +93,27 @@
                     <ul>
                       <li>
                         <p>Telegram:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ freelancer?.contacts?.telegram || emptyText }}</span>
                       </li>
                       <li>
                         <p>Instagram:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ freelancer?.contacts?.instagram || emptyText }}</span>
                       </li>
                       <li>
                         <p>Facebook:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ freelancer?.contacts?.facebook || emptyText }}</span>
                       </li>
                       <li>
                         <p>Behance:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ freelancer?.contacts?.behance || emptyText }}</span>
                       </li>
                       <li>
                         <p>Dribble:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ freelancer?.contacts?.dribble || emptyText }}</span>
                       </li>
                       <li>
                         <p>LinkedIn:</p>
-                        <span>matt@fifestudios.com</span>
+                        <span>{{ contacts?.linkedin || emptyText }}</span>
                       </li>
                     </ul>
                   </div>
@@ -101,7 +121,7 @@
               </div>
               <div>
                 <div>
-                  <div class="card_block main-table px-4 py-4 ">
+                  <div class="card_block main-table px-4 py-4">
                     <FormTitle title="Параметры" />
                     <div class="settings" :class="{ 'select-placeholder': !value }">
                       <a-select
@@ -155,27 +175,16 @@
                       <p class="mt-1">Принимает предложения: <span>5</span></p>
                     </div>
                   </div>
-                
+
                   <div class="card_block main-table px-4 py-4 mt-4">
                     <FormTitle title="BIO" />
                     <div class="bio">
-                      <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Culpa
-                        sequi deleniti fuga? Repellat omnis quos doloribus ea labore
-                        voluptate, maxime fugit similique magni, quasi quae officiis at.
-                        Nihil eveniet laudantium porro nam placeat molestiae laborum
-                        accusamus. Autem molestias cum ipsam dolorem provident beatae ipsa
-                        adipisci ab, qui, vero corrupti, molestiae voluptatem impedit
-                        incidunt ducimus. Natus, nemo. Porro, quam exercitationem vero
-                        ducimus, deleniti repudiandae earum iusto blanditiis quo placeat
-                        non odio numquam. Voluptatum, commodi. Vel reiciendis delectus
-                        repellendus debitis ipsa. Inventore maiores dolorem nam animi
-                        tempore non adipisci, ad ullam eum? Exercitationem et illo
-                        voluptatum? A ipsa laborum culpa consequuntur eveniet?
+                      <p v-if="freelancer?.bio">
+                        {{ freelancer?.bio }}
                       </p>
+                      <a-empty v-else/>
                     </div>
                   </div>
-                
                 </div>
               </div>
             </div>
@@ -434,7 +443,7 @@ import columns from "../../mixins/columns";
 import global from "../../mixins/global";
 import authAccess from "../../mixins/authAccess";
 import BiletCard from "../../components/cards/biletCard.vue";
-
+import moment from "moment";
 export default {
   mixins: [status, authAccess, columns, global],
   head: {
@@ -442,6 +451,8 @@ export default {
   },
   data() {
     return {
+      emptyText: "----",
+      delayTime: 0,
       statusFilter: [
         {
           name: {
@@ -478,13 +489,30 @@ export default {
         accepted: "Принятые",
         canceled: "Отмененные",
       },
-
+      freelancer: {},
       spinning: false,
     };
   },
   computed: {},
-  async mounted() {},
-  methods: {},
+  async mounted() {
+    this.__GET_FREELANCER();
+  },
+  methods: {
+    moment,
+    async __GET_FREELANCER() {
+      try {
+        this.spinning = true;
+        const data = await this.$store.dispatch(
+          "fetchFreelancers/getFreelancerById",
+          this.$route.params.id
+        );
+        this.freelancer = data?.content;
+      } catch (e) {
+      } finally {
+        this.spinning = false;
+      }
+    },
+  },
   components: { TitleBlock, FormTitle, BiletCard },
 };
 </script>
@@ -586,7 +614,8 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
 }
-.statistics-block,.settings {
+.statistics-block,
+.settings {
   display: flex;
   justify-content: space-between;
   gap: 32px;

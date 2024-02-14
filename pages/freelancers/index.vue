@@ -11,47 +11,33 @@
               @changeSearch="($event) => changeSearch($event, '__GET_ORDERS')"
             />
             <div class="input status-select w-100">
-              <a-form-model-item
-                class="form-item mb-0"
-                :class="{ 'select-placeholder': !value }"
-              >
-                <a-select v-model="value" placeholder="Статус">
+              <a-form-model-item class="form-item mb-0">
+                <a-select v-model="filter.online" placeholder="Статус">
                   <a-select-option
-                    v-for="filterItem in statusFilter"
-                    :key="filterItem?.id"
-                    placeholder="good"
+                    v-for="(filterItem, index) in Object.entries(status)"
+                    :key="index"
+                    :value="filterItem[0]"
                   >
-                    {{ filterItem?.name?.ru }}
+                    {{ filterItem[1] }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </div>
             <div class="input status-select w-100">
-              <a-form-model-item
-                class="form-item mb-0"
-                :class="{ 'select-placeholder': !value }"
-              >
-                <a-select v-model="value" placeholder="Дата">
-                  <a-select-option
-                    v-for="filterItem in statusFilter"
-                    :key="filterItem?.id"
-                    placeholder="good"
-                  >
-                    {{ filterItem?.name?.ru }}
+              <a-form-model-item class="form-item mb-0">
+                <a-select v-model="filter.region" placeholder="Область">
+                  <a-select-option v-for="filterItem in regions" :key="filterItem?.id">
+                    {{ filterItem?.name_ru }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
             </div>
             <div class="input status-select w-100">
-              <a-form-model-item
-                class="form-item mb-0"
-                :class="{ 'select-placeholder': !value }"
-              >
+              <a-form-model-item class="form-item mb-0">
                 <a-select v-model="value" placeholder="Категория">
                   <a-select-option
                     v-for="filterItem in statusFilter"
                     :key="filterItem?.id"
-                    placeholder="good"
                   >
                     {{ filterItem?.name?.ru }}
                   </a-select-option>
@@ -61,7 +47,7 @@
             <a-button
               type="primary"
               class="d-flex align-items-center justify-content-center"
-              @click="clearQuery('__GET_ORDERS')"
+              @click="clearFilterPage"
               style="height: 38px"
             >
               <a-icon type="reload"
@@ -75,7 +61,7 @@
       <div class="card_block main-table px-4 py-4">
         <a-table
           :columns="columnsFreelancers"
-          :data-source="data"
+          :data-source="freelancers"
           :pagination="false"
           :loading="loading"
           align="center"
@@ -86,12 +72,12 @@
           <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
 
           <span
-            slot="status"
+            slot="online"
             slot-scope="tags"
             class="tags-style"
             :class="{
-              tag_success: tags == 'online',
-              tag_rejected: tags == 'offline',
+              tag_success: tags,
+              tag_rejected: !tags,
             }"
           >
             <!-- 'new', 'canceled', 'accepted', 'in_process' -->
@@ -174,13 +160,31 @@ export default {
           id: 2,
         },
       ],
-      value: "",
+      statusFilter: [
+        {
+          name: {
+            ru: "Активный",
+          },
+          id: 1,
+        },
+        {
+          name: {
+            ru: "Неактивный",
+          },
+          id: 2,
+        },
+      ],
+      value: undefined,
+      filter: {
+        online: undefined,
+        region: undefined,
+      },
       pageSize: 10,
       eyeIcon: require("../../assets/svg/Eye.svg?raw"),
       editIcon: require("../../assets/svg/edit.svg?raw"),
       deleteIcon: require("../../assets/svg/delete.svg?raw"),
       loading: false,
-      orders: [],
+      freelancers: [],
       data: [
         {
           id: 1,
@@ -204,37 +208,56 @@ export default {
         },
       ],
       status: {
-        online: "В сети",
-        offline: "Не в сети",
+        1: "В сети",
+        0: "Не в сети",
       },
+      regions: [],
     };
   },
   mounted() {
     this.getFirstData("__GET_ORDERS");
     this.checkAllActions("orders");
+    this.__GET_REGIONS();
+    Object.keys(this.$route.query).forEach((elem) => {
+      if (Object.keys(this.filter).includes(elem)) {
+        this.filter[elem] = this.$route.query[elem];
+      }
+    });
   },
   methods: {
     moment,
     deleteAction(id) {},
-
+    clearFilterPage() {
+      this.value = undefined;
+      this.filter = {
+        online: undefined,
+        region: undefined,
+      };
+      this.clearQuery("__GET_ORDERS");
+    },
+    async __GET_REGIONS() {
+      const data = await this.$store.dispatch("fetchRegions/getRegions", {
+        ...this.$route.query,
+      });
+      this.regions = data?.content;
+    },
     async __GET_ORDERS() {
-      console.log("Loading....");
-      // this.loading = true;
-      // const data = await this.$store.dispatch("fetchOrders/getOrders", {
-      //   ...this.$route.query,
-      // });
-      // this.loading = false;
-      // const pageIndex = this.indexPage(
-      //   data?.orders?.current_page,
-      //   data?.orders?.per_page
-      // );
-      // this.orders = data?.orders?.data.map((item, index) => {
-      //   return {
-      //     ...item,
-      //     key: index + pageIndex,
-      //   };
-      // });
-      // this.totalPage = data?.orders?.total;
+      this.loading = true;
+      const data = await this.$store.dispatch("fetchFreelancers/getFreelancers", {
+        params: {
+          ...this.$route.query,
+        },
+      });
+      this.loading = false;
+      const pageIndex = this.indexPage(data?.meta?.current_page, data?.meta?.per_page);
+      this.freelancers = data?.data.map((item, index) => {
+        return {
+          ...item,
+          key: index + pageIndex,
+        };
+      });
+      console.log(this.freelancers);
+      this.totalPage = data?.meta?.total;
       // this.orders.dataAdd = moment(data?.orders?.created_at).format("DD/MM/YYYY");
     },
     indexPage(current_page, per_page) {
@@ -244,6 +267,22 @@ export default {
   watch: {
     async current(val) {
       this.changePagination(val, "__GET_ORDERS");
+    },
+    async "filter.online"(val) {
+      if (this.$route.query?.online != val)
+        await this.$router.replace({
+          path: this.$route.path,
+          query: { ...this.$route.query, online: val },
+        });
+      if (val == this.$route.query.online) this.__GET_ORDERS();
+    },
+    async "filter.region"(val) {
+      if (this.$route.query?.region != val)
+        await this.$router.replace({
+          path: this.$route.path,
+          query: { ...this.$route.query, region: val },
+        });
+      if (val == this.$route.query.region) this.__GET_ORDERS();
     },
     async value(val) {
       if (val) {

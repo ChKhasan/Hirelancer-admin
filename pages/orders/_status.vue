@@ -1,6 +1,13 @@
 <template lang="html">
   <div class="all-orders">
-    <TitleBlock title="Все заказы" :breadbrumb="['Заказы']" lastLink="Все заказы">
+    <TitleBlock
+      v-if="orderStatus[$route.params.status]"
+      :title="orderStatus[$route.params.status]"
+      :breadbrumb="['Заказы']"
+      :lastLink="orderStatus[$route.params.status]"
+    >
+    </TitleBlock>
+    <TitleBlock v-else title="Все заказы" :breadbrumb="['Заказы']" lastLink="Все заказы">
     </TitleBlock>
     <div class="container_xl app-container pb-4 pt-5">
       <div class="card_block main-table px-4 pb-3">
@@ -33,10 +40,11 @@
             </div>
             <div class="input status-select w-100">
               <a-form-model-item
-                class="form-item mb-0"
+                class="form-date mb-0"
                 :class="{ 'select-placeholder': !value }"
               >
-                <a-select v-model="value" placeholder="Дата">
+                <a-range-picker @change="onChange" />
+                <!-- <a-select v-model="value" placeholder="Дата">
                   <a-select-option
                     v-for="filterItem in statusFilter"
                     :key="filterItem?.id"
@@ -44,7 +52,7 @@
                   >
                     {{ filterItem?.name?.ru }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
               </a-form-model-item>
             </div>
             <div class="input status-select w-100">
@@ -210,6 +218,12 @@ export default {
         accepted: "В процессе",
         canceled: "Отмененные",
       },
+      orderStatus: {
+        in_process: "В процессе",
+        in_moderation: "В модерации",
+        active: "Aктивный",
+        cancelled: "Отмена клиентом",
+      },
     };
   },
   mounted() {
@@ -219,11 +233,27 @@ export default {
   methods: {
     moment,
     deleteAction(id) {},
-
+    async onChange(date, dateString) {
+      let params = {
+        date_begin: dateString[0],
+        date_end: dateString[1],
+      };
+      await this.$router.replace({
+        path: this.$route.path,
+        query: { ...this.$route.query, page: 1, ...params },
+      });
+      this.__GET_ORDERS();
+    },
     async __GET_ORDERS() {
       this.loading = true;
+      let params = { ...this.$route.query };
+      if (this.orderStatus[this.$route.params.status]) {
+        params.status = this.$route.params.status;
+      } else {
+        delete params.status;
+      }
       const data = await this.$store.dispatch("fetchOrders/getOrders", {
-        ...this.$route.query,
+        ...params,
       });
       this.loading = false;
       const pageIndex = this.indexPage(data?.meta?.current_page, data?.meta?.per_page);
