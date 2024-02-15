@@ -42,6 +42,11 @@
           :loading="loading"
         >
           <span slot="indexId" slot-scope="text">#{{ text?.key }}</span>
+          <span slot="childs" slot-scope="text">
+            <a-tag color="blue" v-for="item in text" :key="item?.id">
+              {{ item?.name_ru }}
+            </a-tag>
+          </span>
 
           <span slot="id" slot-scope="text">
             <span
@@ -184,6 +189,25 @@ const columns = [
     className: "column-name",
     align: "left",
   },
+  {
+    title: "ПОПУЛЯРНЫЙ ",
+    dataIndex: "popular",
+    key: "popular",
+    slots: { title: "customTitle" },
+    scopedSlots: { customRender: "popular" },
+    
+    className: "column-name",
+    align: "left",
+  },
+  {
+    title: "Подкатегория ",
+    dataIndex: "childs",
+    key: "childs",
+    slots: { title: "customTitle" },
+    scopedSlots: { customRender: "childs" },
+    className: "column-tags",
+    align: "left",
+  },
 
   {
     title: "ДЕЙСТВИЯ",
@@ -304,13 +328,13 @@ export default {
       });
       this.loading = false;
       this.specialities = data?.content.map((item, index) => {
-        if (item.children.length == 0) {
-          delete item["children"];
-        }
-        return {
+        let elem = {
           ...item,
+          childs: item.children,
           key: index + 1,
         };
+        delete elem["children"];
+        return elem;
       });
     },
 

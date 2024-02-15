@@ -105,12 +105,11 @@
             :class="{
               tag_success: !tags.status && tags.end_of_execution,
               tag_inProgress: !tags.status && !tags.end_of_execution,
-              tag_approved: tags.status && !tags.end_of_execution,
-              tag_rejected: tags.status == -1,
+              tag_approved: tags.status == 1 && !tags.end_of_execution,
+              tag_rejected: tags.status == -1 && !tags.end_of_execution,
             }"
           >
-            <!-- 'new', 'canceled', 'accepted', 'in_process' -->
-            {{ tags.status }}
+            {{ currentStatus(tags) }}
           </span>
           <span slot="btns" slot-scope="text">
             <!-- <span
@@ -232,6 +231,24 @@ export default {
   },
   methods: {
     moment,
+    currentStatus(tags) {
+      if (!tags.status && tags.end_of_execution) {
+        return "Завершенный";
+      }
+      if (!tags.status && !tags.end_of_execution) {
+        return "В модерации";
+      }
+      if (tags.status == -1 && !tags.end_of_execution) {
+        return "Отмена - клиент";
+      }
+      if (tags.status == 1 && !tags.end_of_execution) {
+        return "Aктивный";
+      }
+      // tag_success =  !tags.status && tags.end_of_execution,
+      //       tag_inProgress =  !tags.status && !tags.end_of_execution,
+      //       tag_approved =  tags.status && !tags.end_of_execution,
+      //       tag_rejected =  tags.status == -1,
+    },
     deleteAction(id) {},
     async onChange(date, dateString) {
       let params = {

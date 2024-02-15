@@ -119,11 +119,11 @@ export default {
         },
 
         {
-          title: "Категория",
-          dataIndex: "category",
-          scopedSlots: { customRender: "category" },
+          title: "Специальности",
+          dataIndex: "specialities",
+          scopedSlots: { customRender: "specialities" },
           className: "column-name",
-          key: "category",
+          key: "specialities",
         },
         {
           title: "Дата регистрации",
@@ -276,17 +276,16 @@ export default {
 
         {
           title: "Дата",
-          dataIndex: "date",
-          scopedSlots: { customRender: "date" },
+          dataIndex: "created_at",
+          scopedSlots: { customRender: "created_at" },
+          customRender: (text) => moment(text).format("DD.MM.YYYY"),
           className: "column-date",
-          key: "date",
+          key: "created_at",
         },
         {
           title: "Текст ",
-          dataIndex: "text",
           scopedSlots: { customRender: "text" },
           className: "column-name",
-          key: "text",
         },
 
         {

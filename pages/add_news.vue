@@ -63,6 +63,15 @@
             <span>
               <div class="card_block main-table px-4 py-4">
                 <FormTitle title="Параметры" />
+                <a-select v-model="value" class="form-item w-100" placeholder="Status">
+                  <a-select-option
+                    v-for="item in [1, 2, 3]"
+                    :key="item"
+                    :label="item"
+                    :value="item"
+                    >{{ item }}
+                  </a-select-option>
+                </a-select>
                 <div class="clearfix">
                   <a-upload
                     action="https://api.safarpark.uz/api/files/upload"
@@ -126,6 +135,7 @@ export default {
   },
   data() {
     return {
+      value: undefined,
       headers: {
         authorization: `Bearer ${localStorage.getItem("auth_token")}`,
       },

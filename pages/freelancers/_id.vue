@@ -1,27 +1,19 @@
 <template lang="html">
   <div class="freelancer">
-    <TitleBlock :title="`Фрилансер`">
+    <TitleBlock>
+      <a-tabs type="card" @change="callback">
+        <a-tab-pane key="1" tab="Фрилансер"> </a-tab-pane>
+        <a-tab-pane key="2" tab="Заказчик"> </a-tab-pane>
+      </a-tabs>
       <div class="d-flex justify-content-between btn_group">
         <a-button
+          v-for="tabItem in tabList[userType]"
+          :key="tabItem.id"
           class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#info' || $route.hash == '' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'info' })"
+          :type="$route.hash == `#${tabItem.hash}` ? 'primary' : 'default'"
+          @click="$router.push({ hash: tabItem.hash })"
         >
-          Общие данные
-        </a-button>
-        <a-button
-          class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#portfolio' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'portfolio' })"
-        >
-          Портфолио
-        </a-button>
-        <a-button
-          class="add-btn add-header-btn btn-primary d-flex align-items-center"
-          :type="$route.hash == '#orders' ? 'primary' : 'default'"
-          @click="$router.push({ hash: 'orders' })"
-        >
-          Заказы
+          {{ tabItem.title }}
         </a-button>
       </div>
       <div class="d-flex">
@@ -46,7 +38,12 @@
                   <div class="client-info">
                     <div class="image-box">
                       <div class="image">
-                        <img src="@/assets/images/300_21.jpg" alt="" />
+                        <img
+                          v-if="freelancer?.avatar"
+                          :src="`${imgUrl}${freelancer?.avatar}`"
+                          alt=""
+                        />
+                        <img v-else src="@/assets/images/user-4.webp" alt="" />
                       </div>
                       <span class="symbol-badge"></span>
                     </div>
@@ -80,12 +77,26 @@
                       <p class="mt-1">
                         Специальности:
                         <span style="cursor: pointer">
-                          <a-tag color="blue" style="cursor: pointer">
+                          <a-tag color="red" v-if="freelancer?.specialities?.length == 0">
+                            {{ freelancer?.specialities?.length }}
+                          </a-tag>
+                          <a-tag
+                            v-else
+                            color="blue"
+                            style="cursor: pointer"
+                            @click="visible = true"
+                          >
                             {{ freelancer?.specialities?.length }}
                           </a-tag></span
                         >
                       </p>
                     </div>
+                  </div>
+                  <FormTitle title="Статистика" class="mb-0 mt-4" />
+                  <div class="statistics-block personal-info mt-0">
+                    <p class="mt-1">Количество активных заказов: <span>24</span></p>
+                    <p class="mt-1">Количество ожидающих предложений: <span>30</span></p>
+                    <p class="mt-1">Принимает предложения: <span>5</span></p>
                   </div>
                 </div>
                 <div class="card_block main-table px-4 py-4 mt-4">
@@ -113,76 +124,41 @@
                       </li>
                       <li>
                         <p>LinkedIn:</p>
-                        <span>{{ contacts?.linkedin || emptyText }}</span>
+                        <span>{{ freelancer?.contacts?.linkedin || emptyText }}</span>
                       </li>
                     </ul>
+                  </div>
+                </div>
+                <div class="card_block main-table px-4 py-4 mt-4">
+                  <FormTitle title="Параметры" />
+                  <div class="settings" :class="{ 'select-placeholder': !value }">
+                    <a-select
+                      v-model="value"
+                      placeholder="Статус"
+                      :class="{ 'select-placeholder': !value }"
+                    >
+                      <a-select-option
+                        v-for="filterItem in statusFilter"
+                        :key="filterItem?.id"
+                        placeholder="good"
+                      >
+                        {{ filterItem?.name?.ru }}
+                      </a-select-option>
+                    </a-select>
                   </div>
                 </div>
               </div>
               <div>
                 <div>
                   <div class="card_block main-table px-4 py-4">
-                    <FormTitle title="Параметры" />
-                    <div class="settings" :class="{ 'select-placeholder': !value }">
-                      <a-select
-                        v-model="value"
-                        placeholder="Статус"
-                        :class="{ 'select-placeholder': !value }"
-                      >
-                        <a-select-option
-                          v-for="filterItem in statusFilter"
-                          :key="filterItem?.id"
-                          placeholder="good"
-                        >
-                          {{ filterItem?.name?.ru }}
-                        </a-select-option>
-                      </a-select>
-                      <a-select
-                        v-model="value"
-                        placeholder="Статус"
-                        :class="{ 'select-placeholder': !value }"
-                      >
-                        <a-select-option
-                          v-for="filterItem in statusFilter"
-                          :key="filterItem?.id"
-                          placeholder="good"
-                        >
-                          {{ filterItem?.name?.ru }}
-                        </a-select-option>
-                      </a-select>
-                      <a-select
-                        v-model="value"
-                        placeholder="Статус"
-                        :class="{ 'select-placeholder': !value }"
-                      >
-                        <a-select-option
-                          v-for="filterItem in statusFilter"
-                          :key="filterItem?.id"
-                          placeholder="good"
-                        >
-                          {{ filterItem?.name?.ru }}
-                        </a-select-option>
-                      </a-select>
-                    </div>
-                  </div>
-                  <div class="card_block main-table px-4 py-4 mt-4">
-                    <FormTitle title="Статистика" />
-                    <div class="statistics-block personal-info mt-0">
-                      <p class="mt-1">Количество активных заказов: <span>24</span></p>
-                      <p class="mt-1">
-                        Количество ожидающих предложений: <span>30</span>
-                      </p>
-                      <p class="mt-1">Принимает предложения: <span>5</span></p>
-                    </div>
-                  </div>
-
-                  <div class="card_block main-table px-4 py-4 mt-4">
                     <FormTitle title="BIO" />
-                    <div class="bio">
-                      <p v-if="freelancer?.bio">
-                        {{ freelancer?.bio }}
-                      </p>
-                      <a-empty v-else/>
+                    <div
+                      class="bio"
+                      v-if="freelancer?.bio"
+                      v-html="freelancer?.bio"
+                    ></div>
+                    <div class="bio" v-else>
+                      <a-empty />
                     </div>
                   </div>
                 </div>
@@ -430,6 +406,31 @@
         </a-spin>
       </div>
     </a-form-model>
+    <a-modal
+      v-model="visible"
+      class="text-modal"
+      centered
+      :title="'Специальности'"
+      width="720px"
+      @ok="visible = false"
+    >
+      <div class="d-flex flex-column">
+        <a-list item-layout="horizontal" :data-source="freelancer?.specialities">
+          <a-list-item slot="renderItem" slot-scope="item, index">
+            <a-list-item-meta>
+              <a slot="id" href="https://www.antdv.com/">{{ item.id }}</a>
+              <a slot="title" href="https://www.antdv.com/">{{ item.name_ru }}</a>
+              <a-avatar v-if="item.icon" slot="avatar" :src="`${imgUrl}${item.icon}`" />
+              <a-avatar
+                v-else
+                slot="avatar"
+                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+              />
+            </a-list-item-meta>
+          </a-list-item>
+        </a-list>
+      </div>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -451,6 +452,11 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      visible: false,
+      userType: 1,
+      rules: {},
+      form: {},
       emptyText: "----",
       delayTime: 0,
       statusFilter: [
@@ -491,14 +497,71 @@ export default {
       },
       freelancer: {},
       spinning: false,
+      tabList: {
+        1: [
+          {
+            title: "Общие данные",
+            id: 1,
+            hash: "info",
+          },
+          {
+            title: "Портфолио",
+            id: 2,
+            hash: "portfolio",
+          },
+          {
+            title: "Заказы",
+            id: 3,
+            hash: "orders",
+          },
+          {
+            title: "Отзывы",
+            id: 4,
+            hash: "reviews",
+          },
+          {
+            title: "Жалобы",
+            id: 5,
+            hash: "complaints",
+          },
+        ],
+        2: [
+          {
+            title: "Мои отзывы",
+            id: 1,
+            hash: "my-reviews",
+          },
+          {
+            title: "Мои заказы",
+            id: 2,
+            hash: "my-orders",
+          },
+          {
+            title: "мои жалобы",
+            id: 3,
+            hash: "my-complaints",
+          },
+        ],
+      },
     };
   },
-  computed: {},
+  computed: {
+    baseUrl() {
+      return process.env.BASE_URL;
+    },
+    imgUrl() {
+      return this.baseUrl + "/storage/";
+    },
+  },
   async mounted() {
     this.__GET_FREELANCER();
   },
   methods: {
     moment,
+    callback(e) {
+      this.userType = Number(e);
+      this.$router.push({ hash: this.tabList[this.userType][0].hash });
+    },
     async __GET_FREELANCER() {
       try {
         this.spinning = true;
@@ -527,6 +590,7 @@ export default {
   height: 100px;
   border-radius: 0.42rem;
   overflow: hidden;
+  background-color: rgb(128, 128, 128, 0.3);
 }
 .freelancer .image img {
   width: 100%;
@@ -601,6 +665,10 @@ export default {
   position: relative;
   white-space: nowrap;
 }
+.personal-info p {
+  justify-content: space-between;
+  display: flex;
+}
 .personal-info {
   margin-top: 16px;
 }
@@ -614,10 +682,25 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
 }
-.statistics-block,
+
 .settings {
   display: flex;
   justify-content: space-between;
   gap: 32px;
+}
+.statistics-block {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+:deep(.ant-tabs-tab) {
+  font-family: "Inter", sans-serif;
+  font-size: 17.55px;
+  font-weight: 600;
+  margin-top: 3.25px;
+  color: rgba(0, 0, 0, 0.85);
+}
+:deep(.ant-tabs-bar) {
+  margin-bottom: 0;
 }
 </style>

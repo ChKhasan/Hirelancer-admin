@@ -223,7 +223,7 @@
               <FormTitle title="Жалобы" />
               <a-table
                 :columns="columnsComp"
-                :data-source="data"
+                :data-source="order?.complaints"
                 :pagination="false"
                 :loading="loading"
                 align="center"
@@ -241,7 +241,7 @@
                   slot="text"
                   slot-scope="text"
                   class="app-text"
-                  @click="visible = true"
+                  @click="handleComp(text)"
                   >Посмотреть текст</span
                 >
                 <span
@@ -338,6 +338,33 @@
         </div>
       </div>
     </a-modal>
+    <a-modal
+      v-model="visibleComp"
+      class="text-modal"
+      centered
+      :title="'Текст жалобы'"
+      width="720px"
+      @ok="handleOk"
+    >
+      <div class="d-flex flex-column">
+        <div class="head">
+          <ul>
+            <li>
+              {{ currentComp?.freelancer?.name }} - {{ currentComp?.freelancer?.id }}
+            </li>
+            <li>
+              Дата:
+              {{ moment(currentComp.created_at).format("HH:mm DD.MM.YYYY") }}
+            </li>
+          </ul>
+        </div>
+        <div class="body">
+          <p>
+            {{ currentComp?.complaints }}
+          </p>
+        </div>
+      </div>
+    </a-modal>
   </div>
 </template>
 <script>
@@ -391,6 +418,7 @@ export default {
         notSelected: "Не выбран",
       },
       visible: false,
+      visibleComp: false,
       spinning: false,
       delayTime: 0,
       emptyDate: [],
@@ -539,6 +567,7 @@ export default {
       },
       sessions: {},
       currentApp: {},
+      currentComp: {},
     };
   },
   computed: {
@@ -560,6 +589,11 @@ export default {
       console.log(obj);
       this.currentApp = await obj;
       this.visible = true;
+    },
+    async handleComp(obj) {
+      console.log(obj);
+      this.currentComp = await obj;
+      this.visibleComp = true;
     },
     disabledDate(current) {
       return (

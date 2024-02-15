@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="title-block">
-    <div class="page-title d-flex align-items-center">
+    <div class="page-title d-flex align-items-center" v-if="title">
       <h1>{{ title }}</h1>
       <span class="vertical_hr"></span>
       <ul class="d-flex">

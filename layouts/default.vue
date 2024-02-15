@@ -111,9 +111,9 @@ export default {
           {
             key: "41",
             name: "Фрилансеры",
-            to: "/freelancers",
-            add: "/freelancers",
-            edit: "/freelancers",
+            to: "/",
+            add: "/",
+            edit: "/",
             show: this.checkShow("freelancers/all"),
           },
         ],
@@ -259,7 +259,7 @@ export default {
         this.openKeys = ["2"];
       } else if (this.$route.name.includes("settings")) {
         this.openKeys = ["5"];
-      } else if (this.$route.name.includes("freelancers")) {
+      } else if (this.$route.name.includes("index")) {
         this.openKeys = ["3"];
       } else if (this.$route.name.includes("sellers")) {
         this.openKeys = ["4"];
