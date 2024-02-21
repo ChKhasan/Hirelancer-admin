@@ -42,11 +42,11 @@ export default {
           key: "deadline",
         },
         {
-          title: "Категория",
-          dataIndex: "category",
-          scopedSlots: { customRender: "category" },
+          title: "Специальности",
+          dataIndex: "specialities",
+          scopedSlots: { customRender: "specialities" },
           className: "column-name",
-          key: "category",
+          key: "specialities",
         },
         {
           title: "статус",
@@ -92,7 +92,7 @@ export default {
           title: "F.I.SH",
           dataIndex: "name",
           scopedSlots: { customRender: "name" },
-          className: "column-name",
+          className: "column-name cursor-pointer",
           key: "name",
         },
         {

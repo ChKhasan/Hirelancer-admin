@@ -70,6 +70,12 @@
             {{ text }}
           </span>
           <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
+          <span
+            @click="$router.push(`/freelancers/${text}`)"
+            slot="name"
+            slot-scope="text"
+            >{{ text }}</span
+          >
 
           <span
             slot="online"
@@ -289,7 +295,7 @@ export default {
           key: index + pageIndex,
         };
       });
-      console.log(this.freelancers);
+      // console.log(this.freelancers);
       this.totalPage = data?.meta?.total;
       // this.orders.dataAdd = moment(data?.orders?.created_at).format("DD/MM/YYYY");
     },

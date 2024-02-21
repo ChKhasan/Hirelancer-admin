@@ -32,34 +32,88 @@
             :default-selected-keys="['1']"
             :default-open-keys="defaultOpens"
             :open-keys.sync="openKeys"
+            :inline-collapsed="collapsed"
           >
             <a-menu-item
               class="menu_item"
-              v-if="menuData[0]?.menuItems[0]"
-              :key="menuData[0].menuItems[0].key"
+              v-if="menuList.dashboard.show"
+              :key="menuList.dashboard.key"
+              @click="$router.push(menuList.dashboard.to)"
               :class="{
-                'is-active':
-                  menuData[0].menuItems[0].to == $route.path ||
-                  menuData[0].menuItems[0].add == $route.name ||
-                  menuData[0].menuItems[0].edit == $route.name ||
-                  menuData[0].menuItems[0].path == $route.name,
+                'is-active': $route.name == 'dashboard',
               }"
-              ><span v-html="menuData[0].icon"></span>
-              <nuxt-link :to="menuData[0].menuItems[0].to"
-                >{{ d(menuData[0].menuItems[0]) }}
-              </nuxt-link>
+            >
+              <a-icon v-html="menuList.dashboard.icon"></a-icon>
+              <span>
+                <nuxt-link :to="menuList.dashboard.to">
+                  <span>{{ d(menuList.dashboard) }}</span>
+                </nuxt-link>
+              </span>
             </a-menu-item>
             <a-menu-item
               class="menu_item"
-              v-if="menuData[1]?.menuItems[0]"
-              :key="menuData[1].menuItems[0].key"
+              v-if="menuList.freelancers.show"
+              :key="menuList.freelancers.key"
+              @click="$router.push(menuList.freelancers.to)"
+              :class="{
+                'is-active': $route.name == 'index',
+              }"
+            >
+              <a-icon v-html="menuList.freelancers.icon"></a-icon>
+              <span>
+                <nuxt-link :to="menuList.freelancers.to">
+                  <span>{{ d(menuList.freelancers) }}</span>
+                </nuxt-link>
+              </span>
+            </a-menu-item>
+            <a-menu-item
+              class="menu_item"
+              v-if="menuList.orders.show"
+              :key="menuList.orders.key"
+              @click="$router.push(menuList.orders.to)"
               :class="{
                 'is-active': 'orders-status' == $route.name,
               }"
-              ><span v-html="menuData[1].icon"></span>
-              <nuxt-link :to="menuData[1].menuItems[0].to"
-                >{{ d(menuData[1].menuItems[0]) }}
-              </nuxt-link>
+            >
+              <a-icon v-html="menuList.orders.icon"></a-icon>
+              <span>
+                <nuxt-link :to="menuList.orders.to"
+                  ><span>{{ d(menuList.orders) }}</span>
+                </nuxt-link>
+              </span>
+            </a-menu-item>
+
+            <a-menu-item
+              class="menu_item"
+              v-if="menuList.transactions.show"
+              :key="menuList.transactions.key"
+              @click="$router.push(menuList.transactions.to)"
+              :class="{
+                'is-active': 'transactions' == $route.name,
+              }"
+            >
+              <a-icon v-html="menuList.transactions.icon"></a-icon>
+              <span>
+                <nuxt-link :to="menuList.transactions.to"
+                  ><span>{{ d(menuList.transactions) }}</span>
+                </nuxt-link>
+              </span>
+            </a-menu-item>
+            <a-menu-item
+              class="menu_item"
+              v-if="menuList.helpDesk.show"
+              :key="menuList.helpDesk.key"
+              @click="$router.push(menuList.helpDesk.to)"
+              :class="{
+                'is-active': 'help-desk' == $route.name,
+              }"
+            >
+              <a-icon v-html="menuList.helpDesk.icon"></a-icon>
+              <span>
+                <nuxt-link :to="menuList.helpDesk.to"
+                  ><span>{{ d(menuList.helpDesk) }}</span>
+                </nuxt-link>
+              </span>
             </a-menu-item>
             <a-sub-menu
               :key="menu.sub"
@@ -122,6 +176,43 @@ export default {
       logo: require("../assets/svg/logo-light.svg?raw"),
       icon: require("../assets/svg/toolbar-catalog.svg?raw"),
       menuData: [],
+      menuList: {
+        dashboard: {
+          key: "1",
+          icon: require("../assets/svg/dashboard.svg?raw"),
+          name: "Dashboard",
+          show: true,
+          to: "/dashboard",
+        },
+        freelancers: {
+          key: "2",
+          icon: require("../assets/svg/clients.svg?raw"),
+          name: "Фрилансеры",
+          show: true,
+          to: "/",
+        },
+        orders: {
+          name: "Все заказы",
+          key: "3",
+          to: "/orders/all-orders",
+          icon: require("../assets/svg/orderIcon.svg?raw"),
+          show: true,
+        },
+        transactions: {
+          name: "Транзакции",
+          key: "4",
+          to: "/transactions",
+          icon: require("../assets/svg/transc.svg?raw"),
+          show: true,
+        },
+        helpDesk: {
+          name: "Служба поддержки",
+          key: "5",
+          to: "/help-desk",
+          icon: require("../assets/svg/helpDesk.svg?raw"),
+          show: true,
+        },
+      },
     };
   },
 
@@ -228,6 +319,22 @@ export default {
         sub: "5",
         icon: require("../assets/svg/settings.svg?raw"),
         menuItems: [
+          {
+            key: "23",
+            name: "Общие данные",
+            to: "/settings/site-info",
+            add: "settings-site-info",
+            edit: "settings-site-info",
+            show: true,
+          },
+          {
+            key: "24",
+            name: "Переводы",
+            to: "/settings/translations",
+            add: "settings-translations",
+            edit: "settings-translations",
+            show: true,
+          },
           {
             key: "25",
             name: "Регионы",
