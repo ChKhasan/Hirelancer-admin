@@ -322,7 +322,7 @@
 
                 <a-table
                   :columns="columnsOrders"
-                  :data-source="data"
+                  :data-source="freelancer?.orders"
                   :pagination="false"
                   :loading="loading"
                   align="center"
@@ -474,18 +474,7 @@ export default {
         },
       ],
       value: "",
-      data: [
-        {
-          id: 1,
-          name: "Order name",
-          seller: "Seller name",
-          freelancer: "Freelancer name",
-          date: "24/09/2024",
-          count: 4,
-          category: "Kategoriya",
-          status: "active",
-        },
-      ],
+      data: [],
       eyeIcon: require("../../assets/svg/Eye.svg?raw"),
       editIcon: require("../../assets/svg/edit.svg?raw"),
       deleteIcon: require("../../assets/svg/delete.svg?raw"),
@@ -570,6 +559,12 @@ export default {
           this.$route.params.id
         );
         this.freelancer = data?.content;
+        this.freelancer.orders = data?.content?.orders.map((elem) => {
+          return {
+            ...elem,
+            ...elem.order,
+          };
+        });
       } catch (e) {
       } finally {
         this.spinning = false;

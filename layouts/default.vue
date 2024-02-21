@@ -33,7 +33,39 @@
             :default-open-keys="defaultOpens"
             :open-keys.sync="openKeys"
           >
-            <a-sub-menu :key="menu.sub" style="color: #9d9da6" v-for="menu in menuData">
+            <a-menu-item
+              class="menu_item"
+              v-if="menuData[0]?.menuItems[0]"
+              :key="menuData[0].menuItems[0].key"
+              :class="{
+                'is-active':
+                  menuData[0].menuItems[0].to == $route.path ||
+                  menuData[0].menuItems[0].add == $route.name ||
+                  menuData[0].menuItems[0].edit == $route.name ||
+                  menuData[0].menuItems[0].path == $route.name,
+              }"
+              ><span v-html="menuData[0].icon"></span>
+              <nuxt-link :to="menuData[0].menuItems[0].to"
+                >{{ d(menuData[0].menuItems[0]) }}
+              </nuxt-link>
+            </a-menu-item>
+            <a-menu-item
+              class="menu_item"
+              v-if="menuData[1]?.menuItems[0]"
+              :key="menuData[1].menuItems[0].key"
+              :class="{
+                'is-active': 'orders-status' == $route.name,
+              }"
+              ><span v-html="menuData[1].icon"></span>
+              <nuxt-link :to="menuData[1].menuItems[0].to"
+                >{{ d(menuData[1].menuItems[0]) }}
+              </nuxt-link>
+            </a-menu-item>
+            <a-sub-menu
+              :key="menu.sub"
+              style="color: #9d9da6"
+              v-for="menu in menuData.filter((elem) => elem.menuItems.length > 1)"
+            >
               <span slot="title">
                 <span v-html="menu.icon"></span
                 ><span v-if="!collapsed">{{ menu.title }}</span></span
@@ -114,7 +146,7 @@ export default {
             to: "/",
             add: "/",
             edit: "/",
-            show: this.checkShow("freelancers/all"),
+            show: false,
           },
         ],
       },
@@ -123,14 +155,14 @@ export default {
         sub: "2",
         icon: require("../assets/svg/orderIcon.svg?raw"),
         menuItems: [
-          {
-            name: "В модерации",
-            index: "31",
-            to: "/orders/in_moderation",
-            path: "orders-in_moderation",
-            disabled: false,
-            show: this.checkShow("orders"),
-          },
+          // {
+          //   name: "В модерации",
+          //   index: "31",
+          //   to: "/orders/in_moderation",
+          //   path: "orders-in_moderation",
+          //   disabled: false,
+          //   show: this.checkShow("orders"),
+          // },
           {
             name: "Все заказы",
             index: "32",
@@ -139,39 +171,39 @@ export default {
             disabled: false,
             show: this.checkShow("orders"),
           },
-          {
-            name: "Aктивный",
-            index: "33",
-            to: "/orders/active",
-            path: "orders-active",
-            disabled: false,
-            show: this.checkShow("orders"),
-          },
+          // {
+          //   name: "Aктивный",
+          //   index: "33",
+          //   to: "/orders/active",
+          //   path: "orders-active",
+          //   disabled: false,
+          //   show: this.checkShow("orders"),
+          // },
 
-          {
-            name: "В процессе",
-            index: "34",
-            to: "/orders/in_process",
-            path: "orders-in_process",
-            disabled: false,
-            show: this.checkShow("orders"),
-          },
-          {
-            name: "Отмена модератором",
-            index: "35",
-            to: "/orders/concel-moderator",
-            path: "orders-concel-moderator",
-            disabled: false,
-            show: this.checkShow("orders"),
-          },
-          {
-            name: "Отмена клиентом",
-            index: "38",
-            to: "/orders/cancelled",
-            path: "orders-cancelled",
-            disabled: false,
-            show: this.checkShow("orders"),
-          },
+          // {
+          //   name: "В процессе",
+          //   index: "34",
+          //   to: "/orders/in_process",
+          //   path: "orders-in_process",
+          //   disabled: false,
+          //   show: this.checkShow("orders"),
+          // },
+          // {
+          //   name: "Отмена модератором",
+          //   index: "35",
+          //   to: "/orders/concel-moderator",
+          //   path: "orders-concel-moderator",
+          //   disabled: false,
+          //   show: this.checkShow("orders"),
+          // },
+          // {
+          //   name: "Отмена клиентом",
+          //   index: "38",
+          //   to: "/orders/cancelled",
+          //   path: "orders-cancelled",
+          //   disabled: false,
+          //   show: this.checkShow("orders"),
+          // },
         ],
       },
 
@@ -308,4 +340,11 @@ export default {
 </script>
 <style lang="css">
 @import "../assets/css/layout/default.css";
+.menu_item {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+.menu_item span svg {
+  margin-right: 10px;
+}
 </style>

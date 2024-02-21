@@ -148,7 +148,6 @@
       centered
       :title="'Специальности'"
       width="720px"
-      @ok="handleOk"
     >
       <div class="d-flex flex-column">
         <a-list item-layout="horizontal" :data-source="data">
