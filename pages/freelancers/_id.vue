@@ -168,151 +168,60 @@
               <div class="card_block main-table px-4 py-4">
                 <FormTitle title="Portfolio" />
 
-                <div class="portfolios">
-                  <a-card hoverable>
-                    <img
-                      slot="cover"
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                    <template slot="actions" class="ant-card-actions">
-                      <a-icon key="setting" type="setting" />
-                      <a-icon key="edit" type="edit" />
-                      <a-icon key="delete" type="delete" />
-                    </template>
-                    <div class="position-relative">
-                      <a-card-meta
-                        title="Card title"
-                        description="This is the description"
-                      >
-                      </a-card-meta>
-                      <a-badge
-                        class="position-absolute"
-                        style="top: 0; right: 0"
-                        status="success"
+                <div class="portfolios" v-if="freelancer?.works?.length > 0">
+                  <a
+                    :href="portfolio?.link"
+                    v-for="portfolio in freelancer?.works"
+                    :key="portfolio?.id"
+                    target="_blank"
+                  >
+                    <a-card hoverable>
+                      <img
+                        v-if="portfolio?.images[0]?.img"
+                        slot="cover"
+                        alt="example"
+                        :src="`${imgUrl}${portfolio?.images[0]?.img}`"
                       />
-                    </div>
-                    <div class="d-flex justify-content-between w-100 mt-2">
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="like" />
-                        </template>
-                      </a-statistic>
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="eye" />
-                        </template>
-                      </a-statistic>
-                    </div>
-                  </a-card>
-                  <a-card hoverable>
-                    <img
-                      slot="cover"
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                    <template slot="actions" class="ant-card-actions">
-                      <a-icon key="setting" type="setting" />
-                      <a-icon key="edit" type="edit" />
-                      <a-icon key="delete" type="delete" />
-                    </template>
-                    <div class="position-relative">
-                      <a-card-meta
-                        title="Card title"
-                        description="This is the description"
-                      >
-                      </a-card-meta>
-                      <a-badge
-                        class="position-absolute"
-                        style="top: 0; right: 0"
-                        status="success"
+                      <img
+                        v-else
+                        slot="cover"
+                        alt="example"
+                        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
                       />
-                    </div>
-                    <div class="d-flex justify-content-between w-100 mt-2">
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="like" />
-                        </template>
-                      </a-statistic>
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="eye" />
-                        </template>
-                      </a-statistic>
-                    </div>
-                  </a-card>
-                  <a-card hoverable>
-                    <img
-                      slot="cover"
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                    <template slot="actions" class="ant-card-actions">
-                      <a-icon key="setting" type="setting" />
-                      <a-icon key="edit" type="edit" />
-                      <a-icon key="delete" type="delete" />
-                    </template>
-                    <div class="position-relative">
-                      <a-card-meta
-                        title="Card title"
-                        description="This is the description"
-                      >
-                      </a-card-meta>
-                      <a-badge
-                        class="position-absolute"
-                        style="top: 0; right: 0"
-                        status="success"
-                      />
-                    </div>
-                    <div class="d-flex justify-content-between w-100 mt-2">
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="like" />
-                        </template>
-                      </a-statistic>
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="eye" />
-                        </template>
-                      </a-statistic>
-                    </div>
-                  </a-card>
-                  <a-card hoverable>
-                    <img
-                      slot="cover"
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                    />
-                    <template slot="actions" class="ant-card-actions">
-                      <a-icon key="setting" type="setting" />
-                      <a-icon key="edit" type="edit" />
-                      <a-icon key="delete" type="delete" />
-                    </template>
-                    <div class="position-relative">
-                      <a-card-meta
-                        title="Card title"
-                        description="This is the description"
-                      >
-                      </a-card-meta>
-                      <a-badge
-                        class="position-absolute"
-                        style="top: 0; right: 0"
-                        status="success"
-                      />
-                    </div>
-                    <div class="d-flex justify-content-between w-100 mt-2">
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="like" />
-                        </template>
-                      </a-statistic>
-                      <a-statistic :value="1128">
-                        <template #suffix>
-                          <a-icon type="eye" />
-                        </template>
-                      </a-statistic>
-                    </div>
-                  </a-card>
+                      <!-- <template slot="actions" class="ant-card-actions">
+                        <a-icon key="setting" type="setting" />
+                        <a-icon key="edit" type="edit" />
+                        <a-icon key="delete" type="delete" />
+                      </template> -->
+                      <div class="position-relative">
+                        <a-card-meta
+                          :title="portfolio?.name"
+                          :description="portfolio?.desc"
+                        >
+                        </a-card-meta>
+                        <!-- <a-badge
+                          class="position-absolute"
+                          style="top: 0; right: 0"
+                          status="success"
+                        /> -->
+                      </div>
+                      <div class="d-flex justify-content-between w-100 mt-2">
+                        <a-statistic :value="1128">
+                          <template #suffix>
+                            <a-icon type="like" />
+                          </template>
+                        </a-statistic>
+                        <a-statistic :value="1128">
+                          <template #suffix>
+                            <a-icon type="eye" />
+                          </template>
+                        </a-statistic>
+                      </div>
+                    </a-card>
+                  </a>
+                </div>
+                <div v-else>
+                  <a-empty />
                 </div>
               </div>
             </div>
@@ -508,11 +417,11 @@ export default {
             id: 4,
             hash: "reviews",
           },
-          {
-            title: "Жалобы",
-            id: 5,
-            hash: "complaints",
-          },
+          // {
+          //   title: "Жалобы",
+          //   id: 5,
+          //   hash: "complaints",
+          // },
         ],
         2: [
           {
@@ -525,11 +434,11 @@ export default {
             id: 2,
             hash: "my-orders",
           },
-          {
-            title: "мои жалобы",
-            id: 3,
-            hash: "my-complaints",
-          },
+          // {
+          //   title: "мои жалобы",
+          //   id: 3,
+          //   hash: "my-complaints",
+          // },
         ],
       },
     };

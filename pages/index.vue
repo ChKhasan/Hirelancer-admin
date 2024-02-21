@@ -66,15 +66,13 @@
           :loading="loading"
           align="center"
         >
-          <span to="/orders/1232/details" slot="client" slot-scope="text" align="center">
-            {{ text }}
-          </span>
+      
           <span slot="orderId" slot-scope="text">#{{ text?.id }}</span>
           <span
-            @click="$router.push(`/freelancers/${text}`)"
+            @click="$router.push(`/freelancers/${text?.id}`)"
             slot="name"
             slot-scope="text"
-            >{{ text }}</span
+            >{{ text?.name }}</span
           >
 
           <span

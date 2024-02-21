@@ -11,11 +11,10 @@ export default {
         },
         {
           title: "Название",
-          dataIndex: "name",
           scopedSlots: { customRender: "name" },
-          className: "column-name",
-          key: "name",
+          className: "column-name cursor-pointer",
           width: "300px",
+
         },
         {
           title: "Дата",
@@ -28,7 +27,7 @@ export default {
           title: "Цена",
           dataIndex: "price",
           // scopedSlots: { customRender: "price" },
-          customRender: (text) => `${text ? text : "По договоренности"}`,
+          customRender: (text) => `${text ? text : "----"}`,
           className: "column-client",
           key: "price",
         },
@@ -37,7 +36,7 @@ export default {
           title: "Срок",
           dataIndex: "deadline",
           scopedSlots: { customRender: "deadline" },
-          customRender: (text) => `${text ? text : "По договоренности"}`,
+          customRender: (text) => `${text ? text : "----"}`,
           className: "column-name",
           key: "deadline",
         },
@@ -47,12 +46,14 @@ export default {
           scopedSlots: { customRender: "specialities" },
           className: "column-name",
           key: "specialities",
+          align: "center",
         },
         {
           title: "статус",
           scopedSlots: { customRender: "status" },
           className: "column-tags",
           key: "status",
+          align: "center",
         },
         {
           title: "фрилансер - ID",
@@ -70,6 +71,15 @@ export default {
           customRender: (text) => `${text?.name} - ${text?.id}`,
           className: "column-client",
           key: "client",
+        },
+        {
+          title: "Кол-во заявок",
+          dataIndex: "requests",
+          scopedSlots: { customRender: "requests" },
+          customRender: (text) => text?.length || 0,
+          className: "column-name",
+          key: "requests",
+          align: "center",
         },
         {
           title: "ДЕЙСТВИЯ",
@@ -90,10 +100,8 @@ export default {
         },
         {
           title: "F.I.SH",
-          dataIndex: "name",
           scopedSlots: { customRender: "name" },
           className: "column-name cursor-pointer",
-          key: "name",
         },
         {
           title: "Номер телефона",
@@ -214,8 +222,8 @@ export default {
           title: "Имя фрилансера",
           dataIndex: "freelancer",
           scopedSlots: { customRender: "freelancer" },
-          customRender: (text) => text?.name,
-          className: "column-name",
+          // customRender: (text) => text?.name,
+          className: "column-name cursor-pointer",
           key: "freelancer",
         },
 
@@ -248,7 +256,11 @@ export default {
           className: "column-name",
           key: "text",
         },
-
+        {
+          title: "Статус",
+          scopedSlots: { customRender: "status" },
+          className: "column-tags",
+        },
         {
           title: "ДЕЙСТВИЯ",
           key: "id",
@@ -287,7 +299,8 @@ export default {
           scopedSlots: { customRender: "text" },
           className: "column-name",
         },
-
+   
+      
         {
           title: "ДЕЙСТВИЯ",
           key: "id",
@@ -295,7 +308,7 @@ export default {
           scopedSlots: { customRender: "btns" },
           className: "column-btns",
           width: "100px",
-          align: "center",
+          align: "end",
         },
       ],
     };

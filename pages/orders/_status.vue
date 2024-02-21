@@ -93,8 +93,12 @@
           :loading="loading"
           align="center"
         >
-          <span to="/orders/1232/details" slot="client" slot-scope="text" align="center">
-            {{ text }}
+          <span
+            @click="$router.push(`/orders/order/${text?.id}`)"
+            slot="name"
+            slot-scope="text"
+          >
+            {{ text?.name }}
           </span>
           <span slot="specialities" slot-scope="text">
             <a-tag color="red" v-if="text?.length == 0"> {{ text?.length }} </a-tag>
